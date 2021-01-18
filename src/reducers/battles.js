@@ -4,6 +4,7 @@ import { client, sortResults, formatTime } from "../utils";
 const battles = createSlice({
   name: "battles",
   initialState: {
+    date: new Date().getTime(),
     list: [],
     map: {},
   },
@@ -21,10 +22,13 @@ const battles = createSlice({
         ...action.payload,
       };
     },
+    setDate(state, action) {
+      state.date = action.payload;
+    },
   },
 });
 
-const { getBattlesSuccess, getBattleSuccess } = battles.actions;
+const { getBattlesSuccess, getBattleSuccess, setDate } = battles.actions;
 
 const fetchBattles = (date = "2020-01-15") => async (dispatch) => {
   try {
@@ -82,6 +86,6 @@ const selectBattles = createSelector([(state) => state.battles], (battles) =>
   }))
 );
 
-export { fetchBattles, fetchBattle, selectBattles };
+export { fetchBattles, fetchBattle, selectBattles, setDate };
 
 export default battles.reducer;

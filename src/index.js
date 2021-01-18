@@ -1,5 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
+import { MuiPickersUtilsProvider } from "@material-ui/pickers";
+import DateFnsUtils from "@date-io/date-fns";
 import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
 import { CssBaseline } from "@material-ui/core";
 import { Provider } from "react-redux";
@@ -32,12 +34,14 @@ const theme = createMuiTheme({
 const render = () => {
   ReactDOM.render(
     <React.StrictMode>
-      <Provider store={store}>
-        <ThemeProvider theme={theme}>
-          <CssBaseline />
-          <App />
-        </ThemeProvider>
-      </Provider>
+      <MuiPickersUtilsProvider utils={DateFnsUtils}>
+        <Provider store={store}>
+          <ThemeProvider theme={theme}>
+            <CssBaseline />
+            <App />
+          </ThemeProvider>
+        </Provider>
+      </MuiPickersUtilsProvider>
     </React.StrictMode>,
     document.getElementById("root")
   );

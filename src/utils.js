@@ -1,5 +1,8 @@
 import { useState, useEffect } from "react";
+import DateFnsAdapter from "@date-io/date-fns";
 import axios from "axios";
+
+export const dateFns = new DateFnsAdapter();
 
 const getOrientation = () => window.screen.orientation.type;
 

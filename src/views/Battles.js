@@ -1,17 +1,11 @@
-import { useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { fetchBattles, selectBattles } from "../reducers/battles";
+import { useSelector } from "react-redux";
+import { selectBattles } from "../reducers/battles";
 import LevelCard from "../components/LevelCard";
 import Grid from "../components/Grid";
 import ScrollView from "../components/ScrollView";
 
 const Battles = () => {
-  const dispatch = useDispatch();
   const battles = useSelector(selectBattles);
-
-  useEffect(() => {
-    dispatch(fetchBattles());
-  }, [dispatch]);
 
   return (
     <ScrollView id="battles">

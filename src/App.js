@@ -1,7 +1,12 @@
+import { useEffect } from "react";
 import { BrowserRouter } from "react-router-dom";
 import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
 import Button from "@material-ui/core/Button";
+import { DatePicker } from "@material-ui/pickers";
+import { Route } from "react-router-dom";
+
+import { fetchBattles, setDate } from "./reducers/battles";
 
 import Router from "./Router";
 import Navigation from "./components/Navigation";
@@ -9,6 +14,8 @@ import TopBar from "./components/TopBar";
 import Login from "./components/Login";
 import Avatar from "./components/Avatar";
 import { showLogin } from "./reducers/ui";
+
+import { dateFns } from "./utils";
 
 import "./App.css";
 
@@ -39,16 +46,43 @@ const User = styled.div`
   }
 `;
 
+const BattleDatePicker = () => {
+  const dispatch = useDispatch();
+  const date = useSelector((state) => state.battles.date);
+
+  const handleDateChange = (date) => {
+    dispatch(setDate(date.getTime()));
+  };
+
+  useEffect(() => {
+    dispatch(fetchBattles(dateFns.format(date, "yyyy-MM-dd")));
+  }, [dispatch, date]);
+
+  return (
+    <div>
+      <DatePicker
+        variant="inline"
+        value={date}
+        onChange={handleDateChange}
+        format="dd.MM.yyyy"
+      />
+    </div>
+  );
+};
+
 function App() {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user);
+
   return (
     <div className="App">
       <BrowserRouter>
         <Login />
         <TopBar>
           <BarContent>
-            <div>EOL</div>
+            <Route path="/battles" exact>
+              <BattleDatePicker />
+            </Route>
             <div>
               {user.auth ? (
                 <User>
