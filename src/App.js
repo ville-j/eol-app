@@ -5,6 +5,9 @@ import { useDispatch, useSelector } from "react-redux";
 import Button from "@material-ui/core/Button";
 import { DatePicker } from "@material-ui/pickers";
 import { Route } from "react-router-dom";
+import IconButton from "@material-ui/core/IconButton";
+import ArrowLeft from "@material-ui/icons/ArrowLeft";
+import ArrowRight from "@material-ui/icons/ArrowRight";
 
 import { fetchBattles, setDate } from "./reducers/battles";
 
@@ -20,7 +23,7 @@ import { dateFns } from "./utils";
 import "./App.css";
 
 const BarContent = styled.div`
-  margin: 0 12px;
+  margin-right: 12px;
   display: flex;
   flex: 1;
   height: 100%;
@@ -64,9 +67,47 @@ const BattleDatePicker = () => {
         variant="inline"
         value={date}
         onChange={handleDateChange}
-        format="dd.MM.yyyy"
+        format="E dd.MM.yyyy"
+        TextFieldComponent={Input}
       />
     </div>
+  );
+};
+
+const DateContainer = styled.div`
+  cursor: pointer;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+`;
+
+const Input = (props) => {
+  const dispatch = useDispatch();
+  const date = useSelector((state) => state.battles.date);
+
+  const handleDateChange = (date) => {
+    dispatch(setDate(date.getTime()));
+  };
+  return (
+    <>
+      <IconButton
+        onClick={() => {
+          handleDateChange(dateFns.addDays(date, -1));
+        }}
+      >
+        <ArrowLeft />
+      </IconButton>
+      <DateContainer ref={props.inputRef} onClick={props.onClick}>
+        {props.value}
+      </DateContainer>
+      <IconButton
+        onClick={() => {
+          handleDateChange(dateFns.addDays(date, 1));
+        }}
+      >
+        <ArrowRight />
+      </IconButton>
+    </>
   );
 };
 
