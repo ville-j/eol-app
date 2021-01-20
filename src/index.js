@@ -7,8 +7,10 @@ import { CssBaseline } from "@material-ui/core";
 import { Provider } from "react-redux";
 import "./index.css";
 import App from "./App";
+import UpdateSW from "./components/UpdateSW";
 import reportWebVitals from "./reportWebVitals";
-import * as serviceWorker from "./serviceWorker";
+import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
+
 import store from "./store";
 
 const theme = createMuiTheme({
@@ -39,6 +41,7 @@ const render = () => {
           <ThemeProvider theme={theme}>
             <CssBaseline />
             <App />
+            <UpdateSW />
           </ThemeProvider>
         </Provider>
       </MuiPickersUtilsProvider>
@@ -48,8 +51,10 @@ const render = () => {
 };
 
 render();
+
+serviceWorkerRegistration.register();
+
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();
-serviceWorker.register();
