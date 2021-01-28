@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
-import { client } from "../utils";
+import { client, getLocalData } from "../utils";
 
 const replays = createSlice({
   name: "replays",
@@ -68,10 +68,21 @@ const fetchReplayComments = (id) => async (dispatch) => {
 
 const addComment = (id, message) => async (dispatch) => {
   try {
-    await client.post(`https://elma.online/api/replay_comment/add`, {
-      ReplayIndex: id,
-      Text: message,
-    });
+    const { token } = getLocalData("userData");
+    await client.post(
+      `https://elma.online/api/replay_comment/add`,
+      {
+        ReplayIndex: id,
+        Text: message,
+        Entered: Math.floor(new Date().getTime() / 1000),
+      },
+      {
+        headers: {
+          authorization: token,
+        },
+      }
+    );
+    dispatch(fetchReplayComments(id));
   } catch (err) {
     console.log(err);
   }
