@@ -9,7 +9,7 @@ import IconButton from "@material-ui/core/IconButton";
 import ArrowLeft from "@material-ui/icons/ArrowLeft";
 import ArrowRight from "@material-ui/icons/ArrowRight";
 
-import { fetchBattles, setDate } from "./reducers/battles";
+import { fetchBattlesBetween, setDate } from "./reducers/battles";
 
 import Router from "./Router";
 import Navigation from "./components/Navigation";
@@ -58,7 +58,7 @@ const BattleDatePicker = () => {
   };
 
   useEffect(() => {
-    dispatch(fetchBattles(dateFns.format(date, "yyyy-MM-dd")));
+    dispatch(fetchBattlesBetween(date, dateFns.addDays(date, 1)));
   }, [dispatch, date]);
 
   return (
@@ -79,6 +79,8 @@ const DateContainer = styled.div`
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
+  width: 110px;
+  text-align: center;
 `;
 
 const Input = (props) => {
@@ -91,6 +93,7 @@ const Input = (props) => {
   return (
     <>
       <IconButton
+        color="inherit"
         onClick={() => {
           handleDateChange(dateFns.addDays(date, -1));
         }}
@@ -98,9 +101,10 @@ const Input = (props) => {
         <ArrowLeft />
       </IconButton>
       <DateContainer ref={props.inputRef} onClick={props.onClick}>
-        {props.value}
+        {dateFns.isSameDay(date, new Date()) ? "Today" : props.value}
       </DateContainer>
       <IconButton
+        color="inherit"
         onClick={() => {
           handleDateChange(dateFns.addDays(date, 1));
         }}
@@ -132,6 +136,7 @@ function App() {
                 </User>
               ) : (
                 <Button
+                  color="inherit"
                   size="small"
                   onClick={() => {
                     dispatch(showLogin(true));

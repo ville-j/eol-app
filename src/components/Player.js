@@ -1,6 +1,6 @@
 import { useLayoutEffect, useRef, useEffect, useState } from "react";
 import styled from "styled-components";
-import "recplay/amd.js";
+import "../recplay/amd.js";
 
 const Video = styled.div`
   background: #232323;
@@ -44,7 +44,7 @@ const Player = ({ visible, recUrl, levUrl }) => {
           document
         )(function (cnt) {
           canvas.current = cnt;
-          canvas.current.player().setScale(1);
+          canvas.current.player().setScale(0.8);
           resize();
           recUrl && canvas.current.loadReplay(recUrl);
           setLoading(false);

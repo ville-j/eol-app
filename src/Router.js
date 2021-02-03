@@ -8,7 +8,7 @@ import Home from "./views/Home";
 import Replay from "./views/Replay";
 import Battle from "./views/Battle";
 import ScrollView from "./components/ScrollView";
-import Player from "./components/RecPlayer";
+import Player from "./components/Player";
 import BackButton from "./components/BackButton";
 import TopBar from "./components/TopBar";
 

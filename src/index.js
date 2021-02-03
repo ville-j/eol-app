@@ -23,7 +23,7 @@ const theme = createMuiTheme({
       main: "#1fb8d6",
     },
     surface: {
-      light: "#f1f1f1",
+      light: "#0f9878",
       dark: "#212121",
     },
     line: {

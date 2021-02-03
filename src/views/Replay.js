@@ -40,6 +40,7 @@ const Comments = styled.div`
     z-index: 11;
     display: flex;
     flex-direction: column;
+    color: #fff;
 
     > div:last-child {
       flex: 1;

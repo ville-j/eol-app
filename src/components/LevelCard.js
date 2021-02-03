@@ -37,13 +37,15 @@ const Container = styled(Link)`
   text-decoration: none;
   color: inherit;
   display: block;
+  position: relative;
 `;
 
-const LevelCard = ({ linkUrl, times, infoStrip, imageUrl }) => {
+const LevelCard = ({ linkUrl, times, infoStrip, imageUrl, head }) => {
   const classes = useStyles();
   return (
     <Container to={linkUrl}>
       <Card className={classes.root}>
+        {head}
         <CardMedia className={classes.media} image={imageUrl}>
           {infoStrip && (
             <InfoStrip>

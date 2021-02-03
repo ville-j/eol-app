@@ -1,10 +1,10 @@
 import { createSlice, createSelector } from "@reduxjs/toolkit";
-import { client, sortResults, formatTime } from "../utils";
+import { client, sortResults, formatTime, dateFns } from "../utils";
 
 const battles = createSlice({
   name: "battles",
   initialState: {
-    date: new Date().getTime(),
+    date: dateFns.startOfDay(new Date()).getTime(),
     list: [],
     map: {},
   },
@@ -42,6 +42,20 @@ const fetchBattles = (date = "2020-01-15") => async (dispatch) => {
   }
 };
 
+const fetchBattlesBetween = (start, end) => async (dispatch) => {
+  const ds = new Date(start).toISOString();
+  const de = new Date(end).toISOString();
+  try {
+    const data = await client.get(
+      `https://elma.online/api/battle/byPeriod/${ds}/${de}/250`,
+      true
+    );
+    if (data) dispatch(getBattlesSuccess(data.map(battleMap)));
+  } catch (err) {
+    console.log(err);
+  }
+};
+
 const fetchBattle = (id) => async (dispatch) => {
   try {
     const data = await client.get(
@@ -59,12 +73,15 @@ const battleMap = (b) => ({
   type: b.BattleType,
   finished: b.Finished,
   queued: b.InQueue,
-  started: b.StartedUtc,
+  started: Number(b.Started) * 1000,
   duration: b.Duration,
   level: {
     filename: b.LevelData.LevelName,
     name: b.LevelData.LongName,
     id: b.LevelIndex,
+  },
+  replay: {
+    filename: b.RecFileName,
   },
   designer: {
     name: b.KuskiData.Kuski,
@@ -86,6 +103,12 @@ const selectBattles = createSelector([(state) => state.battles], (battles) =>
   }))
 );
 
-export { fetchBattles, fetchBattle, selectBattles, setDate };
+export {
+  fetchBattles,
+  fetchBattle,
+  selectBattles,
+  setDate,
+  fetchBattlesBetween,
+};
 
 export default battles.reducer;
