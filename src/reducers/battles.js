@@ -74,7 +74,7 @@ const battleMap = (b) => ({
   finished: b.Finished,
   queued: b.InQueue,
   started: Number(b.Started) * 1000,
-  duration: b.Duration,
+  duration: Number(b.Duration),
   level: {
     filename: b.LevelData.LevelName,
     name: b.LevelData.LongName,

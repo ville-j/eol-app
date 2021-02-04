@@ -22,10 +22,9 @@ const useStyles = makeStyles({
     textOverflow: "ellipsis",
   },
   team: {
-    fontSize: ".7rem",
-    letterSpacing: ".07rem",
+    fontSize: ".8rem",
     opacity: 0.8,
-    fontWeight: 200,
+    fontWeight: 400,
   },
   timeCell: {
     whiteSpace: "nowrap",
@@ -100,7 +99,6 @@ const Side = styled.div`
     z-index: 11;
     display: flex;
     flex-direction: column;
-    color: #fff;
 
     > div:last-child {
       flex: 1;

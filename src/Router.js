@@ -11,6 +11,7 @@ import ScrollView from "./components/ScrollView";
 import Player from "./components/Player";
 import BackButton from "./components/BackButton";
 import TopBar from "./components/TopBar";
+import BattleType from "./components/BattleType";
 
 const PlayerContainer = styled.div`
   position: relative;
@@ -67,7 +68,8 @@ const Router = () => {
       <Route exact path="/battles/:id">
         <TopBar>
           <BackButton />
-          {battle?.duration}m battle in {battle?.level.filename}.lev
+          {battle?.duration}m <BattleType type={battle?.type} /> battle in{" "}
+          {battle?.level.filename}.lev by {battle?.designer.name}
         </TopBar>
       </Route>
       <MainWrapper isReplayView={isReplayView}>
