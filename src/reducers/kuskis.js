@@ -18,7 +18,7 @@ const { getKuskiSuccess } = replays.actions;
 
 const fetchKuski = (id) => async (dispatch) => {
   try {
-    const data = await client.get(`https://elma.online/api/player/${id}`);
+    const data = await client.get(`https://api.elma.online/api/player/${id}`);
     if (data) dispatch(getKuskiSuccess(data));
   } catch (err) {
     console.log(err);

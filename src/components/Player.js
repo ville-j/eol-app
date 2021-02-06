@@ -39,7 +39,7 @@ const Player = ({ visible, recUrl, levUrl }) => {
       window.require(["controller"], (controller) => {
         controller(
           levUrl,
-          "https://elma.online/recplayer/",
+          "https://api.elma.online/recplayer/",
           container.current,
           document
         )(function (cnt) {

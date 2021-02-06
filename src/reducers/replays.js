@@ -36,7 +36,7 @@ const {
 const fetchReplays = (offset = 0) => async (dispatch) => {
   try {
     const response = await axios.get(
-      `https://elma.online/api/replay?page=${offset}&pageSize=50`
+      `https://api.elma.online/api/replay?page=${offset}&pageSize=50`
     );
     dispatch(getReplaysSuccess(response.data.rows));
   } catch (err) {
@@ -47,7 +47,7 @@ const fetchReplays = (offset = 0) => async (dispatch) => {
 const fetchReplay = (id) => async (dispatch) => {
   try {
     const response = await axios.get(
-      `https://elma.online/api/replay/byUUID/${id}`
+      `https://api.elma.online/api/replay/byUUID/${id}`
     );
     dispatch(getReplaySuccess(response.data));
   } catch (err) {
@@ -58,7 +58,7 @@ const fetchReplay = (id) => async (dispatch) => {
 const fetchReplayComments = (id) => async (dispatch) => {
   try {
     const response = await axios.get(
-      `https://elma.online/api/replay_comment/${id}`
+      `https://api.elma.online/api/replay_comment/${id}`
     );
     dispatch(getReplayCommentsSuccess({ id, data: response.data }));
   } catch (err) {
@@ -70,7 +70,7 @@ const addComment = (id, message) => async (dispatch) => {
   try {
     const { token } = getLocalData("userData");
     await client.post(
-      `https://elma.online/api/replay_comment/add`,
+      `https://api.elma.online/api/replay_comment/add`,
       {
         ReplayIndex: id,
         Text: message,

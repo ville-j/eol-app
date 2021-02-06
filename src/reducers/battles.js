@@ -33,7 +33,7 @@ const { getBattlesSuccess, getBattleSuccess, setDate } = battles.actions;
 const fetchBattles = (date = "2020-01-15") => async (dispatch) => {
   try {
     const data = await client.get(
-      `https://elma.online/api/battle/date/${date}`,
+      `https://api.elma.online/api/battle/date/${date}`,
       true
     );
     if (data) dispatch(getBattlesSuccess(data.map(battleMap)));
@@ -47,7 +47,7 @@ const fetchBattlesBetween = (start, end) => async (dispatch) => {
   const de = new Date(end).toISOString();
   try {
     const data = await client.get(
-      `https://elma.online/api/battle/byPeriod/${ds}/${de}/250`,
+      `https://api.elma.online/api/battle/byPeriod/${ds}/${de}/250`,
       true
     );
     if (data) dispatch(getBattlesSuccess(data.map(battleMap)));
@@ -59,7 +59,7 @@ const fetchBattlesBetween = (start, end) => async (dispatch) => {
 const fetchBattle = (id) => async (dispatch) => {
   try {
     const data = await client.get(
-      `https://elma.online/api/battle/byBattleIndex/${id}`
+      `https://api.elma.online/api/battle/byBattleIndex/${id}`
     );
 
     if (data) dispatch(getBattleSuccess(battleMap(data)));

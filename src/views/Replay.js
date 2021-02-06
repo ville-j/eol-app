@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 import Divider from "@material-ui/core/Divider";
 import TextField from "@material-ui/core/TextField";
@@ -93,11 +93,13 @@ const Replay = () => {
       dispatch(
         loadRec({
           recUrl: `https://eol.ams3.digitaloceanspaces.com/replays/${replay.UUID}/${replay.RecFileName}`,
-          levUrl: `https://elma.online/dl/level/${replay.LevelIndex}`,
+          levUrl: `https://api.elma.online/dl/level/${replay.LevelIndex}`,
         })
       );
     }
   }, [dispatch, match.params.id, replay]);
+
+  const [input, setInput] = useState("");
 
   if (!replay) return null;
 
@@ -130,13 +132,19 @@ const Replay = () => {
               fullWidth
               variant="filled"
               label="Write a comment"
+              value={input}
+              onChange={(e) => {
+                setInput(e.target.value);
+              }}
             />
             <Button
               size="small"
               style={{ marginTop: 12 }}
               variant="outlined"
               onClick={() => {
-                dispatch(addComment("id", "msg"));
+                if (input.length > 1)
+                  dispatch(addComment(replay.ReplayIndex, input));
+                setInput("");
               }}
             >
               Send

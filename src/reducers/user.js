@@ -39,7 +39,7 @@ const { authSuccess, authFail, logout } = user.actions;
 
 const auth = (_username, password) => async (dispatch) => {
   try {
-    const res = await client.post(`https://elma.online/token`, {
+    const res = await client.post(`https://api.elma.online/token`, {
       kuski: _username,
       password,
     });
