@@ -44,7 +44,8 @@ const Player = ({ visible, recUrl, levUrl }) => {
           document
         )(function (cnt) {
           canvas.current = cnt;
-          canvas.current.player().setScale(0.8);
+          const bounds = container.current.getBoundingClientRect();
+          canvas.current.player().setScale(0.0013 * bounds.width);
           resize();
           recUrl && canvas.current.loadReplay(recUrl);
           setLoading(false);

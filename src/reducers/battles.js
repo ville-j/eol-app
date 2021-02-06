@@ -50,7 +50,12 @@ const fetchBattlesBetween = (start, end) => async (dispatch) => {
       `https://api.elma.online/api/battle/byPeriod/${ds}/${de}/250`,
       true
     );
-    if (data) dispatch(getBattlesSuccess(data.map(battleMap)));
+    if (data)
+      dispatch(
+        getBattlesSuccess(
+          data.map(battleMap).filter((b) => !(b.aborted && !b.started))
+        )
+      );
   } catch (err) {
     console.log(err);
   }
@@ -73,6 +78,7 @@ const battleMap = (b) => ({
   type: b.BattleType,
   finished: b.Finished,
   queued: b.InQueue,
+  aborted: b.Aborted,
   started: Number(b.Started) * 1000,
   duration: Number(b.Duration),
   level: {
