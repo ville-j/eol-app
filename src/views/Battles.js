@@ -16,7 +16,7 @@ const Battles = () => {
     <ScrollView id="battles">
       <Grid margin={12} gridMinWidth={350}>
         {battles.map((b) => {
-          const running = b.started && !b.finished && !b.aborted;
+          const running = !!b.started && !b.finished && !b.aborted;
 
           return (
             <LevelCard
@@ -33,7 +33,9 @@ const Battles = () => {
                     </Type>
                     <DateTime>
                       {running && <Countdown end={b.end} />}{" "}
-                      {dateFns.format(b.started, "HH:mm")}
+                      {b.queued
+                        ? "in queue"
+                        : dateFns.format(b.started, "HH:mm")}
                     </DateTime>
                   </Head>
                   {running && (
