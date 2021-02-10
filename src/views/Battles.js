@@ -16,6 +16,8 @@ const Battles = () => {
     <ScrollView id="battles">
       <Grid margin={12} gridMinWidth={350}>
         {battles.map((b) => {
+          const running = b.started && !b.finished && !b.aborted;
+
           return (
             <LevelCard
               imageUrl="https://janka.la:2828/levels/3134/map"
@@ -30,16 +32,12 @@ const Battles = () => {
                       {b.designer.name}
                     </Type>
                     <DateTime>
-                      <Countdown end={b.started + b.duration * 60 * 1000} />{" "}
+                      {running && <Countdown end={b.end} />}{" "}
                       {dateFns.format(b.started, "HH:mm")}
                     </DateTime>
                   </Head>
-                  {new Date() < b.started + b.duration * 60 * 1000 && (
-                    <Timeline
-                      start={b.started}
-                      end={b.started + b.duration * 60 * 1000}
-                      theme={theme}
-                    />
+                  {running && (
+                    <Timeline start={b.started} end={b.end} theme={theme} />
                   )}
                 </>
               }
@@ -132,6 +130,7 @@ const TimelineBackground = styled.div`
   width: 100%;
   z-index: 10;
   height: 5px;
+  overflow: hidden;
 `;
 
 const TimelineTime = styled.div`

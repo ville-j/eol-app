@@ -80,6 +80,7 @@ const battleMap = (b) => ({
   queued: b.InQueue,
   aborted: b.Aborted,
   started: Number(b.Started) * 1000,
+  end: Number(b.Started) + b.duration * 60 * 1000,
   duration: Number(b.Duration),
   level: {
     filename: b.LevelData.LevelName,
