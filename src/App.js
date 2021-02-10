@@ -58,7 +58,16 @@ const BattleDatePicker = () => {
   };
 
   useEffect(() => {
+    const interval =
+      dateFns.addDays(date, 1) > new Date()
+        ? setInterval(() => {
+            dispatch(fetchBattlesBetween(date, dateFns.addDays(date, 1)));
+          }, 15000)
+        : null;
     dispatch(fetchBattlesBetween(date, dateFns.addDays(date, 1)));
+    return () => {
+      clearInterval(interval);
+    };
   }, [dispatch, date]);
 
   return (
