@@ -14,11 +14,13 @@ const Container = styled.div`
 
 const scrollStore = {};
 
+export const resetScroll = (id) => delete scrollStore[id];
+
 const ScrollView = ({ children, id, enableAt = 0, disabled }) => {
   const view = useRef(null);
 
   useLayoutEffect(() => {
-    if (scrollStore[id]) view.current.scrollTop = scrollStore[id];
+    view.current.scrollTop = scrollStore[id] ? scrollStore[id] : 0;
   });
   return (
     <Container

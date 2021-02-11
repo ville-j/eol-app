@@ -11,9 +11,11 @@ import { useEffect, useState } from "react";
 
 const Battles = () => {
   const battles = useSelector(selectBattles);
+  const date = useSelector((state) => state.battles.date);
   const theme = useTheme();
+
   return (
-    <ScrollView id="battles">
+    <ScrollView id={`battles-${date}`}>
       <Grid margin={12} gridMinWidth={350}>
         {battles.map((b) => {
           const running = !!b.started && !b.finished && !b.aborted;

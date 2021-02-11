@@ -16,6 +16,7 @@ import Navigation from "./components/Navigation";
 import TopBar from "./components/TopBar";
 import Login from "./components/Login";
 import Avatar from "./components/Avatar";
+import { resetScroll } from "./components/ScrollView";
 import { showLogin } from "./reducers/ui";
 
 import { dateFns } from "./utils";
@@ -55,16 +56,20 @@ const BattleDatePicker = () => {
 
   const handleDateChange = (date) => {
     dispatch(setDate(date.getTime()));
+    resetScroll(`battles-${date.getTime()}`);
   };
 
   useEffect(() => {
+    const end = dateFns.addDays(date, 1);
     const interval =
-      dateFns.addDays(date, 1) > new Date()
+      end > new Date()
         ? setInterval(() => {
-            dispatch(fetchBattlesBetween(date, dateFns.addDays(date, 1)));
+            dispatch(fetchBattlesBetween(date, end));
           }, 15000)
         : null;
-    dispatch(fetchBattlesBetween(date, dateFns.addDays(date, 1)));
+
+    dispatch(fetchBattlesBetween(date, end));
+
     return () => {
       clearInterval(interval);
     };
@@ -98,6 +103,7 @@ const Input = (props) => {
 
   const handleDateChange = (date) => {
     dispatch(setDate(date.getTime()));
+    resetScroll(`battles-${date.getTime()}`);
   };
   return (
     <>
