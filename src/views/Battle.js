@@ -51,7 +51,9 @@ const Battle = () => {
     if (battle) {
       dispatch(
         loadRec({
-          recUrl: `https://api.elma.online/dl/battlereplay/${match.params.id}`,
+          recUrl: battle.finished
+            ? `https://api.elma.online/dl/battlereplay/${match.params.id}`
+            : null,
           levUrl: `https://api.elma.online/dl/level/${battle.level.id}`,
         })
       );

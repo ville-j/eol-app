@@ -9,7 +9,6 @@ const Video = styled.div`
   > canvas {
     width: 100%;
     outline: 0;
-    pointer-events: none;
     ${(props) => !props.visible && `display: none;`}
   }
 `;
@@ -44,8 +43,6 @@ const Player = ({ visible, recUrl, levUrl }) => {
           document
         )(function (cnt) {
           canvas.current = cnt;
-          const bounds = container.current.getBoundingClientRect();
-          canvas.current.player().setScale(0.0013 * bounds.width);
           resize();
           recUrl && canvas.current.loadReplay(recUrl);
           setLoading(false);
@@ -53,7 +50,7 @@ const Player = ({ visible, recUrl, levUrl }) => {
       });
     } else {
       canvas.current.loadLevel(levUrl, () => {
-        canvas.current.loadReplay(recUrl);
+        recUrl && canvas.current.loadReplay(recUrl);
         setLoading(false);
       });
     }

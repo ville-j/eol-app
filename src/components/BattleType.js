@@ -23,7 +23,7 @@ const BattleType = ({ type }) => {
     case "HT":
       return "1 hour tt";
     default:
-      return type;
+      return type || "";
   }
 };
 
