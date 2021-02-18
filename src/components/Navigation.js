@@ -12,6 +12,7 @@ const Container = styled.div`
   width: 100%;
   border-top: 1px solid
     ${(props) => props.theme.palette.line[props.theme.palette.type]};
+  background: ${(props) => props.theme.palette.background.paper};
   overflow: hidden;
   z-index: 12;
 `;
