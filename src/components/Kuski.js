@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchKuski } from "../reducers/kuskis";
 
-const Kuski = ({ id }) => {
+const Kuski = ({ id, renderer }) => {
   const dispatch = useDispatch();
   const kuski = useSelector((state) => state.kuskis[id]);
 
@@ -10,7 +10,11 @@ const Kuski = ({ id }) => {
     dispatch(fetchKuski(id));
   }, [id, dispatch]);
 
-  return kuski ? kuski.name : null;
+  return renderer
+    ? renderer(kuski?.name, kuski?.team)
+    : kuski
+    ? kuski.name
+    : null;
 };
 
 export default Kuski;

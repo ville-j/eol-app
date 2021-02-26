@@ -89,13 +89,26 @@ const sortResults = (battleType) => (a, b) => {
   if (a.Time === 0 && b.Time !== 0) return 1;
   if (b.Time === 0 && a.Time !== 0) return -1;
   const d = b.Apples - a.Apples;
-  return d === 0 ? a.BattleTimeIndex - b.BattleTimeIndex : d;
+  return d === 0 ? a.TimeIndex - b.TimeIndex : d;
+};
+
+const sortRuns = (battleType) => (a, b) => {
+  if (a.Finished === "F" && b.Finished === "F") {
+    const c = reversedBattleTypes.find((t) => t === battleType)
+      ? b.Time - a.Time
+      : a.Time - b.Time;
+    return c === 0 ? a.TimeIndex - b.TimeIndex : c;
+  }
+  if (a.Finished !== "F" && b.Finished === "F") return 1;
+  if (b.Finished !== "F" && a.Finished === "F") return -1;
+  const d = b.Apples - a.Apples;
+  return d === 0 ? a.TimeIndex - b.TimeIndex : d;
 };
 
 const thousandsValues = [1000, 59999, 60000, 3, 3600000];
 const hundredsValues = [100, 5999, 6000, 2, 360000];
 
-const formatTime = (time, apples, thousands = false) => {
+const formatTime = (time, apples, finished, thousands = false) => {
   // for cup results
   if (apples === -1) {
     if (time === 9999100) {
@@ -108,7 +121,7 @@ const formatTime = (time, apples, thousands = false) => {
       return `${10000000 - time} apple${10000000 - time !== 1 ? `s` : ``}`;
     }
   }
-  if (time === 0) {
+  if (time === 0 || (finished && finished !== "F")) {
     return `${apples} apple${apples !== 1 ? `s` : ``}`;
   }
 
@@ -144,4 +157,5 @@ export {
   setLocalData,
   getLocalData,
   removeLocalData,
+  sortRuns,
 };

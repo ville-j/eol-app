@@ -1,5 +1,5 @@
 import { createSlice, createSelector } from "@reduxjs/toolkit";
-import { client, sortResults, formatTime, dateFns } from "../utils";
+import { client, sortResults, formatTime, dateFns, sortRuns } from "../utils";
 
 const battles = createSlice({
   name: "battles",
@@ -7,6 +7,7 @@ const battles = createSlice({
     date: dateFns.startOfDay(new Date()).getTime(),
     list: [],
     map: {},
+    runs: {},
   },
   reducers: {
     getBattlesSuccess(state, action) {
@@ -22,15 +23,43 @@ const battles = createSlice({
         ...action.payload,
       };
     },
+    getBattleRunsSuccess(state, action) {
+      if (!state.runs[action.payload.id]) state.runs[action.payload.id] = [];
+      const l = state.runs[action.payload.id].length;
+
+      state.runs[action.payload.id].push({
+        time: new Date().getTime(),
+        runs: action.payload.rows.map((r) => {
+          return {
+            ...r,
+            prev:
+              l > 0
+                ? state.runs[action.payload.id][l - 1].runs.findIndex(
+                    (pr) => pr.kuskiIndex === r.kuskiIndex
+                  )
+                : -1,
+          };
+        }),
+      });
+
+      if (state.runs[action.payload.id].length > 2) {
+        state.runs[action.payload.id].shift();
+      }
+    },
     setDate(state, action) {
       state.date = action.payload;
     },
   },
 });
 
-const { getBattlesSuccess, getBattleSuccess, setDate } = battles.actions;
+const {
+  getBattlesSuccess,
+  getBattleSuccess,
+  getBattleRunsSuccess,
+  setDate,
+} = battles.actions;
 
-const fetchBattles = (date = "2020-01-15") => async (dispatch) => {
+const fetchBattles = (date) => async (dispatch) => {
   try {
     const data = await client.get(
       `https://api.elma.online/api/battle/date/${date}`,
@@ -73,6 +102,34 @@ const fetchBattle = (id) => async (dispatch) => {
   }
 };
 
+const fetchBattleRuns = (id, type) => async (dispatch) => {
+  try {
+    const data = await client.get(
+      `https://api.elma.online/api/battle/allRuns/${id}`,
+      true
+    );
+
+    if (data)
+      dispatch(
+        getBattleRunsSuccess({
+          id,
+          rows: data.rows
+            .sort(sortRuns(type))
+            .reduce((acc, cur) => {
+              const existing = acc.find((k) => k.KuskiIndex === cur.KuskiIndex);
+
+              if (!existing) acc.push(cur);
+
+              return acc;
+            }, [])
+            .map(runMap),
+        })
+      );
+  } catch (err) {
+    console.log(err);
+  }
+};
+
 const battleMap = (b) => ({
   id: b.BattleIndex,
   type: b.BattleType,
@@ -82,6 +139,7 @@ const battleMap = (b) => ({
   started: Number(b.Started) * 1000,
   end: Number(b.Started) * 1000 + Number(b.Duration) * 60 * 1000,
   duration: Number(b.Duration),
+  running: !b.Finished && b.Started && !b.Aborted,
   level: {
     filename: b.LevelData.LevelName,
     name: b.LevelData.LongName,
@@ -94,14 +152,18 @@ const battleMap = (b) => ({
     name: b.KuskiData.Kuski,
     team: b.KuskiData.TeamData?.Team,
   },
-  results: b.Results.sort(sortResults(b.BattleType)).map((r) => ({
-    name: r.KuskiData.Kuski,
-    team: r.KuskiData.TeamData?.Team,
-    time: formatTime(r.Time, r.Apples),
-    timeRaw: r.Time,
-    apples: r.Apples,
-    timeIndex: r.TimeIndex,
-  })),
+  results: b.Results.sort(sortResults(b.BattleType)).map(runMap),
+});
+
+const runMap = (r) => ({
+  name: r.KuskiData?.Kuski,
+  team: r.KuskiData?.TeamData?.Team,
+  time: formatTime(r.Time, r.Apples, r.Finished),
+  timeRaw: r.Time,
+  apples: r.Apples,
+  timeIndex: r.TimeIndex,
+  kuskiIndex: r.KuskiIndex,
+  finished: r.Finished,
 });
 
 const selectBattles = createSelector([(state) => state.battles], (battles) =>
@@ -116,6 +178,7 @@ export {
   selectBattles,
   setDate,
   fetchBattlesBetween,
+  fetchBattleRuns,
 };
 
 export default battles.reducer;
