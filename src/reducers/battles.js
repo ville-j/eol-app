@@ -136,8 +136,11 @@ const battleMap = (b) => ({
   finished: b.Finished,
   queued: b.InQueue,
   aborted: b.Aborted,
-  started: Number(b.Started) * 1000,
-  end: Number(b.Started) * 1000 + Number(b.Duration) * 60 * 1000,
+  started: Number(b.Started) * 1000 + Number(b.Countdown || 0) * 1000,
+  end:
+    Number(b.Started) * 1000 +
+    Number(b.Duration) * 60 * 1000 +
+    Number(b.Countdown || 0) * 1000,
   duration: Number(b.Duration),
   running: !b.Finished && b.Started && !b.Aborted,
   level: {

@@ -5,6 +5,8 @@ import { makeStyles } from "@material-ui/core/styles";
 import { List, ListItem, Divider } from "@material-ui/core";
 import { useSelector, useDispatch } from "react-redux";
 import styled from "styled-components";
+import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
+import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
 
 import { fetchBattle, fetchBattleRuns } from "../reducers/battles";
 import Kuski from "../components/Kuski";
@@ -42,6 +44,10 @@ const useStyles = makeStyles({
   prePosition: {
     whiteSpace: "nowrap",
     overflow: "hidden",
+    display: "flex",
+    color: "#888888",
+    fontSize: ".7rem",
+    alignItems: "center",
   },
 });
 
@@ -58,7 +64,7 @@ const Battle = () => {
     if (battle) {
       dispatch(
         loadRec({
-          recUrl: battle.finished
+          recUrl: battle.replay.filename
             ? `https://api.elma.online/dl/battlereplay/${match.params.id}`
             : null,
           levUrl: `https://api.elma.online/dl/level/${battle.level.id}`,
@@ -68,19 +74,20 @@ const Battle = () => {
   }, [dispatch, match.params.id, battle]);
 
   useEffect(() => {
+    let inter;
+
     if (battle && battle.end > new Date()) {
       dispatch(fetchBattleRuns(battle.id, battle.type));
-    }
-    const inter = setInterval(() => {
-      if (battle) {
+
+      inter = setInterval(() => {
         if (battle.end > new Date()) {
           dispatch(fetchBattleRuns(battle.id, battle.type));
         } else {
-          clearInterval(inter);
           dispatch(fetchBattle(battle.id));
+          clearInterval(inter);
         }
-      }
-    }, 15000);
+      }, 15000);
+    }
 
     return () => {
       clearInterval(inter);
@@ -91,7 +98,7 @@ const Battle = () => {
     <>
       <Side theme={theme}>
         <div className={classes.results}>
-          Results {battle?.running && "Live"}
+          Results {battle?.running && "live"}
         </div>
         <Divider />
 
@@ -137,13 +144,17 @@ const Battle = () => {
                   </div>
                   <div className={classes.timeCell}>{t.time}</div>
                   <div className={classes.prePosition}>
-                    {t.prev === -1
-                      ? " *"
-                      : t.prev === i
-                      ? ""
-                      : t.prev - i < 0
-                      ? " d " + Math.abs(t.prev - i)
-                      : " u " + Math.abs(t.prev - i)}
+                    {t.prev === -1 || t.prev === i ? (
+                      ""
+                    ) : t.prev - i < 0 ? (
+                      <>
+                        <RankDown /> {Math.abs(t.prev - i)}
+                      </>
+                    ) : (
+                      <>
+                        <RankUp /> {Math.abs(t.prev - i)}
+                      </>
+                    )}
                   </div>
                 </ListItem>
                 <Divider />
@@ -173,6 +184,16 @@ const Side = styled.div`
       flex: 1;
     }
   }
+`;
+
+const RankDown = styled(KeyboardArrowDownIcon)`
+  color: #bf0000;
+  font-size: 1rem;
+`;
+
+const RankUp = styled(KeyboardArrowUpIcon)`
+  color: #06cc06;
+  font-size: 1rem;
 `;
 
 export default Battle;
