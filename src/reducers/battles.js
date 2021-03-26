@@ -1,10 +1,22 @@
 import { createSlice, createSelector } from "@reduxjs/toolkit";
 import { client, sortResults, formatTime, dateFns, sortRuns } from "../utils";
 
+export const getTimestamp = () => {
+  try {
+    const t = new URLSearchParams(window.location.search).get("t");
+    console.log(t);
+    if (+t) return Number(t);
+  } catch (ex) {
+    console.log(ex);
+  }
+
+  return dateFns.startOfDay(new Date()).getTime();
+};
+
 const battles = createSlice({
   name: "battles",
   initialState: {
-    date: dateFns.startOfDay(new Date()).getTime(),
+    date: getTimestamp(),
     list: [],
     map: {},
     runs: {},
@@ -49,6 +61,9 @@ const battles = createSlice({
     setDate(state, action) {
       state.date = action.payload;
     },
+    resetDate(state) {
+      state.date = getTimestamp();
+    },
   },
 });
 
@@ -57,6 +72,7 @@ const {
   getBattleSuccess,
   getBattleRunsSuccess,
   setDate,
+  resetDate,
 } = battles.actions;
 
 const fetchBattles = (date) => async (dispatch) => {
@@ -182,6 +198,7 @@ export {
   setDate,
   fetchBattlesBetween,
   fetchBattleRuns,
+  resetDate,
 };
 
 export default battles.reducer;

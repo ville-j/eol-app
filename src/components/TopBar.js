@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { useTheme } from "@material-ui/core/styles";
 
 const Container = styled.div`
-  background: ${(props) => props.theme.palette.primary.main};
+  background: ${(props) => props.theme.palette.topBar};
   color: ${(props) => props.theme.palette.primary.contrastText};
   position: absolute;
   top: 0;

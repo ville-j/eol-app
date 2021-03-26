@@ -1,13 +1,14 @@
 import { useSelector } from "react-redux";
 import styled from "styled-components";
+import { useTheme } from "@material-ui/core/styles";
+import { useEffect, useState } from "react";
+
 import { selectBattles } from "../reducers/battles";
 import LevelCard from "../components/LevelCard";
 import Grid from "../components/Grid";
 import ScrollView from "../components/ScrollView";
 import BattleType from "../components/BattleType";
 import { dateFns } from "../utils";
-import { useTheme } from "@material-ui/core/styles";
-import { useEffect, useState } from "react";
 
 const Battles = () => {
   const battles = useSelector(selectBattles);

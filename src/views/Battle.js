@@ -40,6 +40,7 @@ const useStyles = makeStyles({
     alignItems: "center",
     padding: "0 16px",
     flex: "0 0 48px",
+    height: "48px",
   },
   prePosition: {
     whiteSpace: "nowrap",
@@ -98,7 +99,7 @@ const Battle = () => {
     <>
       <Side theme={theme}>
         <div className={classes.results}>
-          Results {battle?.running && "live"}
+          Results {battle?.running ? "live" : ""}
         </div>
         <Divider />
 

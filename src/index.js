@@ -30,6 +30,7 @@ const theme = createMuiTheme({
       light: "#dcdcdc",
       dark: "#595959",
     },
+    topBar: "#171717",
   },
 });
 
