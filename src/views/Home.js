@@ -29,6 +29,7 @@ const Battles = () => {
               uploaderId={r.UploadedBy}
               timestamp={r.Uploaded}
               infoStrip={formatTime(r.ReplayTime, 0, null, true).slice(0, -1)}
+              levelId={r.LevelIndex}
             />
           );
         })}

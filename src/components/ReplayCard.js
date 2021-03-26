@@ -47,6 +47,7 @@ const ReplayCard = ({
   id,
   timestamp,
   infoStrip,
+  levelId,
 }) => {
   const classes = useStyles();
 
@@ -55,7 +56,7 @@ const ReplayCard = ({
       <Card className={classes.card}>
         <CardMedia
           className={classes.media}
-          image="https://janka.la:2828/levels/3134/map"
+          image={`http://janka.la:8765/image?l=${levelId}&r=${id}&n=${filename}`}
           title="Paella dish"
         >
           <InfoStrip>
