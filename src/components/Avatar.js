@@ -20,11 +20,10 @@ const Avatar = ({ id, name }) => {
   useEffect(() => {
     if (!kuski && !name) dispatch(fetchKuski(id));
   }, [id, dispatch, kuski, name]);
-
   return (
     <Container
       alt={kuski?.Kuski || name}
-      src={`https://elmaonline.net/images/shirt/${id}`}
+      src={`https://api.elma.online/dl/shirt/${id}`}
     />
   );
 };
