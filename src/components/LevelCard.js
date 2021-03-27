@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import Card from "@material-ui/core/Card";
 import CardMedia from "@material-ui/core/CardMedia";
 import { makeStyles } from "@material-ui/core/styles";
 import { List, ListItem, Divider } from "@material-ui/core";
 import styled from "styled-components";
+import VisibilitySensor from 'react-visibility-sensor';
 import Link from "./Link";
 import InfoStrip from "./InfoStrip";
 
@@ -41,17 +42,22 @@ const Container = styled(Link)`
 
 const LevelCard = ({ linkUrl, times, infoStrip, imageUrl, head }) => {
   const classes = useStyles();
+  const [showImage, setShowImage] = useState(false);
   return (
     <Container to={linkUrl}>
       <Card className={classes.root}>
         {head}
-        <CardMedia className={classes.media} image={imageUrl}>
-          {infoStrip && (
-            <InfoStrip>
-              <span>{infoStrip}</span>
-            </InfoStrip>
-          )}
-        </CardMedia>
+        <VisibilitySensor partialVisibility={true} onChange={(visible) => {
+          visible && setShowImage(true)
+        }}>
+          <CardMedia className={classes.media} image={showImage ? imageUrl : ''}>
+            {infoStrip && (
+              <InfoStrip>
+                <span>{infoStrip}</span>
+              </InfoStrip>
+            )}
+          </CardMedia>
+        </VisibilitySensor>
         <List disablePadding>
           {times.slice(0, 3).map((t, i) => (
             <React.Fragment key={i}>

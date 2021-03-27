@@ -1,7 +1,9 @@
+import React, { useState } from "react";
 import Card from "@material-ui/core/Card";
 import CardMedia from "@material-ui/core/CardMedia";
 import { makeStyles } from "@material-ui/core/styles";
 import styled from "styled-components";
+import VisibilitySensor from 'react-visibility-sensor';
 import Link from "./Link";
 import Avatar from "./Avatar";
 import InfoStrip from "./InfoStrip";
@@ -50,19 +52,24 @@ const ReplayCard = ({
   levelId,
 }) => {
   const classes = useStyles();
+  const [showImage, setShowImage] = useState(false);
 
   return (
     <Container to={`/r/${id}`}>
       <Card className={classes.card}>
-        <CardMedia
-          className={classes.media}
-          image={`http://janka.la:8765/image?l=${levelId}&r=${id}&n=${filename}`}
-          title="Paella dish"
-        >
-          <InfoStrip>
-            <span>{infoStrip}</span>
-          </InfoStrip>
-        </CardMedia>
+        <VisibilitySensor partialVisibility={true} onChange={(visible) => {
+          visible && setShowImage(true)
+        }}>
+          <CardMedia
+            className={classes.media}
+            image={showImage ? `http://janka.la:8765/image?l=${levelId}&r=${id}&n=${filename}` : ''}
+            title="Paella dish"
+          >
+            <InfoStrip>
+              <span>{infoStrip}</span>
+            </InfoStrip>
+          </CardMedia>
+        </VisibilitySensor>
         <ReplayInfo>
           <div>
             <Avatar id={uploaderId} name={uploader} />{" "}
