@@ -68,7 +68,9 @@ const Battle = () => {
           recUrl: battle.replay.filename
             ? `https://api.elma.online/dl/battlereplay/${match.params.id}`
             : null,
-          levUrl: `https://api.elma.online/dl/level/${battle.level.id}`,
+          levUrl: battle.started
+            ? `https://api.elma.online/dl/level/${battle.level.id}`
+            : null,
         })
       );
     }

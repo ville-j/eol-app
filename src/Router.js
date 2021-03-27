@@ -44,7 +44,6 @@ const MainWrapper = styled.div`
 const Router = () => {
   const match = useRouteMatch("/r/:id");
   const matchBattle = useRouteMatch("/battles/:id");
-  const isReplayView = !!match || !!matchBattle;
 
   const replay = useSelector((state) => state.replays.map[match?.params.id]);
   const battle = useSelector(
@@ -52,6 +51,8 @@ const Router = () => {
   );
 
   const { recUrl, levUrl } = useSelector((state) => state.player);
+
+  const isReplayView = !!match || (!!matchBattle && battle?.started);
 
   useEffect(() => {
     window.dispatchEvent(new Event("resize"));
