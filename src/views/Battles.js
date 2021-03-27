@@ -29,7 +29,7 @@ const Battles = () => {
 
             return (
               <LevelCard
-                imageUrl={`http://janka.la:8765/image?l=${b.level.id}`}
+                imageUrl={`https://janka.la:5555/image?l=${b.level.id}`}
                 linkUrl={`battles/${b.id}`}
                 key={b.id}
                 times={b.results}
