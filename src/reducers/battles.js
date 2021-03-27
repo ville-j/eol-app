@@ -4,7 +4,6 @@ import { client, sortResults, formatTime, dateFns, sortRuns } from "../utils";
 export const getTimestamp = () => {
   try {
     const t = new URLSearchParams(window.location.search).get("t");
-    console.log(t);
     if (+t) return Number(t);
   } catch (ex) {
     console.log(ex);
@@ -17,14 +16,14 @@ const battles = createSlice({
   name: "battles",
   initialState: {
     date: getTimestamp(),
-    list: [],
+    list: {},
     map: {},
     runs: {},
   },
   reducers: {
     getBattlesSuccess(state, action) {
-      state.list = action.payload.map((b) => b.id);
-      action.payload.forEach((b) => {
+      state.list[action.payload.key] = action.payload.list.map((b) => b.id);
+      action.payload.list.forEach((b) => {
         state.map[b.id] = {
           ...b,
         };
@@ -97,9 +96,10 @@ const fetchBattlesBetween = (start, end) => async (dispatch) => {
     );
     if (data)
       dispatch(
-        getBattlesSuccess(
-          data.map(battleMap).filter((b) => !(b.aborted && !b.started))
-        )
+        getBattlesSuccess({
+          key: start,
+          list: data.map(battleMap).filter((b) => !(b.aborted && !b.started)),
+        })
       );
   } catch (err) {
     console.log(err);

@@ -3,7 +3,6 @@ import styled from "styled-components";
 import { useTheme } from "@material-ui/core/styles";
 import { useEffect, useState } from "react";
 
-import { selectBattles } from "../reducers/battles";
 import LevelCard from "../components/LevelCard";
 import Grid from "../components/Grid";
 import ScrollView from "../components/ScrollView";
@@ -11,44 +10,51 @@ import BattleType from "../components/BattleType";
 import { dateFns } from "../utils";
 
 const Battles = () => {
-  const battles = useSelector(selectBattles);
   const date = useSelector((state) => state.battles.date);
+  const battles = useSelector((state) =>
+    state.battles.list[`${date}`]
+      ? state.battles.list[`${date}`].map((b) => ({
+          ...state.battles.map[b],
+        }))
+      : []
+  );
   const theme = useTheme();
 
   return (
     <ScrollView id={`battles-${date}`}>
       <Grid margin={12} gridMinWidth={350}>
-        {battles.map((b) => {
-          const running = !!b.started && !b.finished && !b.aborted;
+        {battles &&
+          battles.map((b) => {
+            const running = !!b.started && !b.finished && !b.aborted;
 
-          return (
-            <LevelCard
-              imageUrl={`http://janka.la:8765/image?l=${b.level.id}`}
-              linkUrl={`battles/${b.id}`}
-              key={b.id}
-              times={b.results}
-              head={
-                <>
-                  <Head theme={theme}>
-                    <Type>
-                      {b.duration}m <BattleType type={b.type} /> &middot;{" "}
-                      {b.designer.name}
-                    </Type>
-                    <DateTime>
-                      {running && <Countdown end={b.end} />}{" "}
-                      {b.queued
-                        ? "in queue"
-                        : dateFns.format(b.started, "HH:mm")}
-                    </DateTime>
-                  </Head>
-                  {running && (
-                    <Timeline start={b.started} end={b.end} theme={theme} />
-                  )}
-                </>
-              }
-            />
-          );
-        })}
+            return (
+              <LevelCard
+                imageUrl={`http://janka.la:8765/image?l=${b.level.id}`}
+                linkUrl={`battles/${b.id}`}
+                key={b.id}
+                times={b.results}
+                head={
+                  <>
+                    <Head theme={theme}>
+                      <Type>
+                        {b.duration}m <BattleType type={b.type} /> &middot;{" "}
+                        {b.designer.name}
+                      </Type>
+                      <DateTime>
+                        {running && <Countdown end={b.end} />}{" "}
+                        {b.queued
+                          ? "in queue"
+                          : dateFns.format(b.started, "HH:mm")}
+                      </DateTime>
+                    </Head>
+                    {running && (
+                      <Timeline start={b.started} end={b.end} theme={theme} />
+                    )}
+                  </>
+                }
+              />
+            );
+          })}
       </Grid>
     </ScrollView>
   );
