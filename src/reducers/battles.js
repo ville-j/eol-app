@@ -9,8 +9,10 @@ export const getTimestamp = () => {
     console.log(ex);
   }
 
-  return dateFns.startOfDay(new Date()).getTime();
+  return getToday();
 };
+
+export const getToday = () => dateFns.startOfDay(new Date()).getTime();
 
 const battles = createSlice({
   name: "battles",
@@ -61,7 +63,7 @@ const battles = createSlice({
       state.date = action.payload;
     },
     resetDate(state) {
-      state.date = getTimestamp();
+      state.date = getToday();
     },
   },
 });
