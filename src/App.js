@@ -4,12 +4,12 @@ import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
 import Button from "@material-ui/core/Button";
 import { DatePicker } from "@material-ui/pickers";
-import { Route, useHistory } from "react-router-dom";
+import { Route, useHistory, useLocation } from "react-router-dom";
 import IconButton from "@material-ui/core/IconButton";
 import ArrowLeft from "@material-ui/icons/ArrowLeft";
 import ArrowRight from "@material-ui/icons/ArrowRight";
 
-import { fetchBattlesBetween, setDate } from "./reducers/battles";
+import { fetchBattlesBetween, setDate, getToday } from "./reducers/battles";
 import Router from "./Router";
 import Navigation from "./components/Navigation";
 import TopBar from "./components/TopBar";
@@ -53,11 +53,17 @@ const BattleDatePicker = () => {
   const dispatch = useDispatch();
   const history = useHistory();
   const date = useSelector((state) => state.battles.date);
+  const location = useLocation();
+  const t = new URLSearchParams(location.search).get("t");
+
+  useEffect(() => {
+    if (t) dispatch(setDate(Number(t)));
+    else dispatch(setDate(getToday()));
+  }, [dispatch, t]);
 
   const handleDateChange = (date) => {
-    dispatch(setDate(date.getTime()));
-    history.push(`/battles?t=${date.getTime()}`);
     resetScroll(`battles-${date.getTime()}`);
+    history.push(`/battles?t=${date.getTime()}`);
   };
 
   useEffect(() => {
@@ -99,16 +105,14 @@ const DateContainer = styled.div`
 `;
 
 const Input = (props) => {
-  const dispatch = useDispatch();
   const history = useHistory();
-
   const date = useSelector((state) => state.battles.date);
 
   const handleDateChange = (date) => {
-    dispatch(setDate(date.getTime()));
-    history.push(`/battles?t=${date.getTime()}`);
     resetScroll(`battles-${date.getTime()}`);
+    history.push(`/battles?t=${date.getTime()}`);
   };
+
   return (
     <>
       <IconButton
