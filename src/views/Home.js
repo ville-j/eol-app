@@ -12,8 +12,8 @@ const Battles = () => {
 
   useEffect(() => {
     dispatch(fetchReplays());
-    /* eslint-disable-next-line */
-  }, []);
+  }, [dispatch]);
+
   return (
     <ScrollView id="replays">
       <Grid margin={12} gridMinWidth={350}>

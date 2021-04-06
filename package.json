@@ -2,7 +2,7 @@
   "name": "eol-app",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://eol.janka.la",
+  "homepage": "https://epple.janka.la",
   "dependencies": {
     "@date-io/date-fns": "1.x",
     "@material-ui/core": "^4.11.0",

@@ -12,12 +12,16 @@ import {
   fetchReplay,
   fetchReplayComments,
   addComment,
+  fetchLevelReplays,
 } from "../reducers/replays";
 import { loadRec } from "../reducers/player";
 import Avatar from "../components/Avatar";
 import Kuski from "../components/Kuski";
 import Timestamp from "../components/Timestamp";
 import ScrollView from "../components/ScrollView";
+import ReplayCard from "../components/ReplayCard";
+import SideScroller from "../components/SideScroller";
+import { formatTime } from "../utils";
 
 const Comment = styled.div`
   margin: 0;
@@ -72,32 +76,40 @@ const Replay = () => {
   const theme = useTheme();
   const match = useRouteMatch("/r/:id");
   const replay = useSelector((state) => state.replays.map[match.params.id]);
+  const replays = useSelector((state) => state.replays);
   const comments = useSelector(
     (state) => state.replays.comments[replay?.ReplayIndex]
   );
 
   const user = useSelector((state) => state.user);
-
   const dispatch = useDispatch();
+  const { UUID, RecFileName, LevelIndex, ReplayIndex } = replay || {};
+
+  const suggestions = useSelector(
+    (state) => state.replays.byLevel[replay?.LevelIndex] || []
+  ).filter((id) => id !== UUID);
 
   useEffect(() => {
     dispatch(fetchReplay(match.params.id));
   }, [dispatch, match.params.id]);
 
   useEffect(() => {
-    if (replay) dispatch(fetchReplayComments(replay.ReplayIndex));
-  }, [dispatch, replay]);
+    if (ReplayIndex) {
+      dispatch(fetchReplayComments(ReplayIndex));
+      dispatch(fetchLevelReplays(LevelIndex));
+    }
+  }, [dispatch, ReplayIndex, LevelIndex]);
 
   useEffect(() => {
-    if (replay) {
+    if (ReplayIndex) {
       dispatch(
         loadRec({
-          recUrl: `https://eol.ams3.digitaloceanspaces.com/replays/${replay.UUID}/${replay.RecFileName}`,
-          levUrl: `https://api.elma.online/dl/level/${replay.LevelIndex}`,
+          recUrl: `https://eol.ams3.digitaloceanspaces.com/replays/${UUID}/${RecFileName}`,
+          levUrl: `https://api.elma.online/dl/level/${LevelIndex}`,
         })
       );
     }
-  }, [dispatch, match.params.id, replay]);
+  }, [dispatch, ReplayIndex, UUID, RecFileName, LevelIndex]);
 
   const [input, setInput] = useState("");
 
@@ -169,7 +181,28 @@ const Replay = () => {
             {comments?.length === 0 && <EmptyData>no comments</EmptyData>}
           </ScrollView>
         </div>
+        <Divider />
       </Comments>
+      {suggestions.length > 0 && (
+        <SideScroller title="Suggested">
+          {suggestions.map((id) => {
+            const r = replays.map[id];
+            return (
+              <ReplayCard
+                key={r.ReplayIndex}
+                id={r.UUID}
+                title={r.Comment}
+                uploader={r.UploadedByData?.Kuski}
+                filename={r.RecFileName}
+                uploaderId={r.UploadedBy}
+                timestamp={r.Uploaded}
+                infoStrip={formatTime(r.ReplayTime, 0, null, true).slice(0, -1)}
+                levelId={r.LevelIndex}
+              />
+            );
+          })}
+        </SideScroller>
+      )}
     </>
   );
 };

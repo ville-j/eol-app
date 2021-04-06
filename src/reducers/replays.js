@@ -8,6 +8,7 @@ const replays = createSlice({
     list: [],
     map: {},
     comments: {},
+    byLevel: {},
   },
   reducers: {
     getReplaysSuccess(state, action) {
@@ -24,6 +25,16 @@ const replays = createSlice({
     getReplayCommentsSuccess(state, action) {
       state.comments[action.payload.id] = action.payload.data;
     },
+    getLevelReplaysSuccess(state, action) {
+      state.byLevel[action.payload.levelId] = action.payload.data.map(
+        (r) => r.UUID
+      );
+      action.payload.data.forEach((r) => {
+        state.map[r.UUID] = {
+          ...r,
+        };
+      });
+    },
   },
 });
 
@@ -31,6 +42,7 @@ const {
   getReplaysSuccess,
   getReplaySuccess,
   getReplayCommentsSuccess,
+  getLevelReplaysSuccess,
 } = replays.actions;
 
 const fetchReplays = (offset = 0) => async (dispatch) => {
@@ -66,6 +78,17 @@ const fetchReplayComments = (id) => async (dispatch) => {
   }
 };
 
+const fetchLevelReplays = (levelId) => async (dispatch) => {
+  try {
+    const response = await axios.get(
+      `https://api.elma.online/api/replay/byLevelIndex/${levelId}`
+    );
+    dispatch(getLevelReplaysSuccess({ levelId, data: response.data }));
+  } catch (err) {
+    console.log(err);
+  }
+};
+
 const addComment = (id, message) => async (dispatch) => {
   try {
     const { token } = getLocalData("userData");
@@ -88,6 +111,12 @@ const addComment = (id, message) => async (dispatch) => {
   }
 };
 
-export { fetchReplays, fetchReplay, fetchReplayComments, addComment };
+export {
+  fetchReplays,
+  fetchReplay,
+  fetchReplayComments,
+  addComment,
+  fetchLevelReplays,
+};
 
 export default replays.reducer;

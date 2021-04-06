@@ -50,6 +50,12 @@ const Router = () => {
     (state) => state.battles.map[matchBattle?.params.id]
   );
 
+  const viewId = match
+    ? match.params.id
+    : matchBattle
+    ? matchBattle.params.id
+    : null;
+
   const { recUrl, levUrl } = useSelector((state) => state.player);
 
   const isReplayView = !!match || (!!matchBattle && battle?.started);
@@ -74,7 +80,7 @@ const Router = () => {
         </TopBar>
       </Route>
       <MainWrapper isReplayView={isReplayView}>
-        <ScrollView disabled={!isReplayView}>
+        <ScrollView disabled={!isReplayView} id={viewId}>
           <PlayerContainer visible={isReplayView}>
             <div style={{ position: "relative" }}>
               <PlayerPositioner>

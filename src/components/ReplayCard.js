@@ -70,7 +70,7 @@ const ReplayCard = ({
                 ? `https://janka.la:5555/image?l=${levelId}&r=${id}&n=${filename}`
                 : ""
             }
-            title="Paella dish"
+            title={filename}
           >
             <InfoStrip>
               <span>{infoStrip}</span>
