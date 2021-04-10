@@ -43,8 +43,8 @@ const SideScroller = ({ title, children }) => {
       <Container>
         <Scrollbars>
           <Items>
-            {children?.map((c) => (
-              <ItemContainer>{c}</ItemContainer>
+            {children?.map((c, i) => (
+              <ItemContainer key={i}>{c}</ItemContainer>
             ))}
           </Items>
         </Scrollbars>

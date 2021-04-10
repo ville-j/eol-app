@@ -32,7 +32,7 @@ const Comment = styled.div`
 `;
 
 const Comments = styled.div`
-  @media all and (min-width: 561px) {
+  @media all and (min-width: 1000px) {
     position: fixed;
     right: 0;
     top: 0;
@@ -70,6 +70,33 @@ const EmptyData = styled.div`
 
 const InputContainer = styled.div`
   padding: 12px;
+`;
+
+const DataContainer = styled.div`
+  flex: 1;
+  display: flex;
+  justify-content: flex-end;
+`;
+
+const DataTable = styled.div`
+  font-size: 0.8em;
+  opacity: 0.8;
+  margin-left: 0.8em;
+  white-space: nowrap;
+  display: table;
+  > div {
+    display: table-row;
+    > * {
+      display: table-cell;
+    }
+    font-weight: 100;
+  }
+`;
+
+const DataTitle = styled.span`
+  font-weight: 400;
+  padding-right: 8px;
+  width: 70px;
 `;
 
 const Replay = () => {
@@ -131,6 +158,22 @@ const Replay = () => {
           {replay.Comment && <div>{replay.Comment}</div>}
           <div>{replay.RecFileName}</div>
         </div>
+        <DataContainer>
+          <DataTable>
+            <div>
+              <DataTitle>length</DataTitle>
+              <span>{formatTime(replay.ReplayTime, 0, null, true, true)}</span>
+            </div>
+            <div>
+              <DataTitle>finished</DataTitle>
+              <span>{replay.Finished ? "yes" : "no"}</span>
+            </div>
+            <div>
+              <DataTitle>tas</DataTitle>
+              <span>{replay.TAS ? "yes" : "no"}</span>
+            </div>
+          </DataTable>
+        </DataContainer>
       </ReplayInfo>
       <Divider />
       <Comments theme={theme}>
@@ -164,7 +207,7 @@ const Replay = () => {
           </InputContainer>
         )}
         <div>
-          <ScrollView enableAt="651px">
+          <ScrollView enableAt={1000}>
             {comments?.map((c) => (
               <Comment key={c.ReplayCommentIndex} theme={theme}>
                 <div>
@@ -181,7 +224,6 @@ const Replay = () => {
             {comments?.length === 0 && <EmptyData>no comments</EmptyData>}
           </ScrollView>
         </div>
-        <Divider />
       </Comments>
       {suggestions.length > 0 && (
         <SideScroller title="Suggested">
@@ -196,7 +238,7 @@ const Replay = () => {
                 filename={r.RecFileName}
                 uploaderId={r.UploadedBy}
                 timestamp={r.Uploaded}
-                infoStrip={formatTime(r.ReplayTime, 0, null, true).slice(0, -1)}
+                infoStrip={formatTime(r.ReplayTime, 0, null, true)}
                 levelId={r.LevelIndex}
               />
             );

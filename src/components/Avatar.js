@@ -7,8 +7,10 @@ import styled from "styled-components";
 
 const Container = styled(MUIAvatar)`
   img {
-    width: 135%;
-    height: 135%;
+    width: 200%;
+    height: 200%;
+    margin-left: -10%;
+    margin-top: 5%;
   }
   margin-right: 0.8em;
 `;

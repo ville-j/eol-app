@@ -1,16 +1,6 @@
 import { useRef, useLayoutEffect } from "react";
-import styled, { css } from "styled-components";
-
-const Container = styled.div`
-  ${(props) =>
-    !props.disabled &&
-    css`
-      @media all and (min-width: ${(props) => props.enableAt}) {
-        height: 100%;
-        overflow-y: auto;
-      }
-    `}
-`;
+import { Scrollbars } from "react-custom-scrollbars";
+import { useWindowDimensions } from "../utils";
 
 const scrollStore = {};
 
@@ -18,21 +8,28 @@ export const resetScroll = (id) => delete scrollStore[id];
 
 const ScrollView = ({ children, id, enableAt = 0, disabled }) => {
   const view = useRef(null);
+  const [w] = useWindowDimensions();
 
   useLayoutEffect(() => {
-    view.current.scrollTop = scrollStore[id] ? scrollStore[id] : 0;
+    if (view.current?.scrollTop) {
+      view.current.scrollTop(scrollStore[id] ? scrollStore[id] : 0);
+    }
   });
+
+  const d = disabled || w < enableAt;
+
   return (
-    <Container
-      disabled={disabled}
-      enableAt={enableAt}
+    <Scrollbars
+      autoHide={true}
       ref={view}
-      onScroll={() => {
-        scrollStore[id] = view.current.scrollTop;
+      autoHeight={d}
+      style={{ height: d ? "auto" : "100%", width: "100%" }}
+      onScroll={(e) => {
+        scrollStore[id] = e.target.scrollTop;
       }}
     >
       {children}
-    </Container>
+    </Scrollbars>
   );
 };
 

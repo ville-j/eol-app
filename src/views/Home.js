@@ -28,7 +28,7 @@ const Battles = () => {
               filename={r.RecFileName}
               uploaderId={r.UploadedBy}
               timestamp={r.Uploaded}
-              infoStrip={formatTime(r.ReplayTime, 0, null, true).slice(0, -1)}
+              infoStrip={formatTime(r.ReplayTime, 0, null, true)}
               levelId={r.LevelIndex}
             />
           );

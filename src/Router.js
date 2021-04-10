@@ -12,21 +12,12 @@ import Player from "./components/Player";
 import BackButton from "./components/BackButton";
 import TopBar from "./components/TopBar";
 import BattleType from "./components/BattleType";
+import { formatTime } from "./utils";
 
 const PlayerContainer = styled.div`
   position: relative;
   ${(props) => !props.visible && `height: 0;`}
   overflow: hidden;
-`;
-
-const Sizer = styled.div`
-  padding-top: 56.25%;
-`;
-
-const PlayerPositioner = styled.div`
-  position: absolute;
-  width: 100%;
-  height: 100%;
 `;
 
 const MainWrapper = styled.div`
@@ -36,9 +27,15 @@ const MainWrapper = styled.div`
   height: 100%;
   ${(props) => props.isReplayView && `width: 60%;`}
 
-  @media all and (max-width: 560px) {
+  @media all and (max-width: 999px) {
     width: 100%;
   }
+`;
+
+const Dash = styled.span`
+  opacity: 0.8;
+  display: inline-block;
+  margin: 0 5px;
 `;
 
 const Router = () => {
@@ -69,7 +66,9 @@ const Router = () => {
       <Route exact path="/r/:id">
         <TopBar>
           <BackButton />
-          {replay?.RecFileName}
+          <span>{replay?.RecFileName}</span>
+          <Dash>/</Dash>
+          <span>{formatTime(replay?.ReplayTime, 0, null, true, false)}</span>
         </TopBar>
       </Route>
       <Route exact path="/battles/:id">
@@ -82,16 +81,7 @@ const Router = () => {
       <MainWrapper isReplayView={isReplayView}>
         <ScrollView disabled={!isReplayView} id={viewId}>
           <PlayerContainer visible={isReplayView}>
-            <div style={{ position: "relative" }}>
-              <PlayerPositioner>
-                <Player
-                  visible={isReplayView}
-                  recUrl={recUrl}
-                  levUrl={levUrl}
-                />
-              </PlayerPositioner>
-              <Sizer />
-            </div>
+            <Player visible={isReplayView} recUrl={recUrl} levUrl={levUrl} />
           </PlayerContainer>
           <Route exact path="/r/:id">
             <Replay />

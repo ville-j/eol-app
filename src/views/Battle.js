@@ -170,7 +170,7 @@ const Battle = () => {
 };
 
 const Side = styled.div`
-  @media all and (min-width: 561px) {
+  @media all and (min-width: 1000px) {
     position: fixed;
     right: 0;
     top: 0;

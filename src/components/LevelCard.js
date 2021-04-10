@@ -4,7 +4,7 @@ import CardMedia from "@material-ui/core/CardMedia";
 import { makeStyles } from "@material-ui/core/styles";
 import { List, ListItem, Divider } from "@material-ui/core";
 import styled from "styled-components";
-import VisibilitySensor from 'react-visibility-sensor';
+import VisibilitySensor from "react-visibility-sensor";
 import Link from "./Link";
 import InfoStrip from "./InfoStrip";
 
@@ -47,10 +47,17 @@ const LevelCard = ({ linkUrl, times, infoStrip, imageUrl, head }) => {
     <Container to={linkUrl}>
       <Card className={classes.root}>
         {head}
-        <VisibilitySensor partialVisibility={true} onChange={(visible) => {
-          visible && setShowImage(true)
-        }}>
-          <CardMedia className={classes.media} image={showImage ? imageUrl : ''}>
+        <VisibilitySensor
+          partialVisibility={true}
+          onChange={(visible) => {
+            visible && setShowImage(true);
+          }}
+        >
+          <CardMedia
+            className={classes.media}
+            image={showImage ? imageUrl : ""}
+          >
+            {!showImage && <>no image</>}
             {infoStrip && (
               <InfoStrip>
                 <span>{infoStrip}</span>

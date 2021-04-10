@@ -25,6 +25,28 @@ const useScreenOrientation = () => {
   );
 };
 
+const useWindowDimensions = () => {
+  const [dimensions, setDimensions] = useState({
+    width: window.innerWidth,
+    height: window.innerHeight,
+  });
+
+  useEffect(() => {
+    const updateDimensions = () => {
+      setDimensions({
+        width: window.innerWidth,
+        height: window.innerHeight,
+      });
+    };
+    window.addEventListener("resize", updateDimensions);
+    return () => {
+      window.removeEventListener("resize", updateDimensions);
+    };
+  }, []);
+
+  return [dimensions.width, dimensions.height];
+};
+
 const requestCache = new Map();
 
 const requestGet = async (url, noCache) => {
@@ -108,7 +130,13 @@ const sortRuns = (battleType) => (a, b) => {
 const thousandsValues = [1000, 59999, 60000, 3, 3600000];
 const hundredsValues = [100, 5999, 6000, 2, 360000];
 
-const formatTime = (time, apples, finished, thousands = false) => {
+const formatTime = (
+  time,
+  apples,
+  finished,
+  thousands = false,
+  showThousands
+) => {
   // for cup results
   if (apples === -1) {
     if (time === 9999100) {
@@ -135,18 +163,20 @@ const formatTime = (time, apples, finished, thousands = false) => {
     .toString()
     .padStart(values[3], 0)}`;
 
+  const decim = !thousands || showThousands ? string : string.slice(0, -1);
+
   if (time > values[4]) {
     const hours = Math.floor((time / values[4]) % 60);
     return `${hours}:${Math.floor(time / values[2] - hours * 60)
       .toString()
-      .padStart(2, 0)}:${string}`;
+      .padStart(2, 0)}:${decim}`;
   }
 
   if (time > values[1]) {
-    return `${Math.floor(time / values[2])}:${string}`;
+    return `${Math.floor(time / values[2])}:${decim}`;
   }
 
-  return string;
+  return decim;
 };
 
 export {
@@ -158,4 +188,5 @@ export {
   getLocalData,
   removeLocalData,
   sortRuns,
+  useWindowDimensions,
 };
