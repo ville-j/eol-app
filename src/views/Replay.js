@@ -19,8 +19,7 @@ import Avatar from "../components/Avatar";
 import Kuski from "../components/Kuski";
 import Timestamp from "../components/Timestamp";
 import ScrollView from "../components/ScrollView";
-import ReplayCard from "../components/ReplayCard";
-import SideScroller from "../components/SideScroller";
+import ReplaySuggestions from "../components/ReplaySuggestions";
 import { formatTime } from "../utils";
 
 const Comment = styled.div`
@@ -39,7 +38,7 @@ const Comments = styled.div`
     width: 40%;
     height: 100%;
     background: ${(props) =>
-      props.theme.palette.surface[props.theme.palette.type]};
+    props.theme.palette.surface[props.theme.palette.type]};
     padding-bottom: 57px;
     z-index: 11;
     display: flex;
@@ -103,7 +102,6 @@ const Replay = () => {
   const theme = useTheme();
   const match = useRouteMatch("/r/:id");
   const replay = useSelector((state) => state.replays.map[match.params.id]);
-  const replays = useSelector((state) => state.replays);
   const comments = useSelector(
     (state) => state.replays.comments[replay?.ReplayIndex]
   );
@@ -111,10 +109,6 @@ const Replay = () => {
   const user = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const { UUID, RecFileName, LevelIndex, ReplayIndex } = replay || {};
-
-  const suggestions = useSelector(
-    (state) => state.replays.byLevel[replay?.LevelIndex] || []
-  ).filter((id) => id !== UUID);
 
   useEffect(() => {
     dispatch(fetchReplay(match.params.id));
@@ -225,26 +219,7 @@ const Replay = () => {
           </ScrollView>
         </div>
       </Comments>
-      {suggestions.length > 0 && (
-        <SideScroller title="Suggested">
-          {suggestions.map((id) => {
-            const r = replays.map[id];
-            return (
-              <ReplayCard
-                key={r.ReplayIndex}
-                id={r.UUID}
-                title={r.Comment}
-                uploader={r.UploadedByData?.Kuski}
-                filename={r.RecFileName}
-                uploaderId={r.UploadedBy}
-                timestamp={r.Uploaded}
-                infoStrip={formatTime(r.ReplayTime, 0, null, true)}
-                levelId={r.LevelIndex}
-              />
-            );
-          })}
-        </SideScroller>
-      )}
+      <ReplaySuggestions levId={replay?.LevelIndex} excludeUUID={UUID} />
     </>
   );
 };

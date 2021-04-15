@@ -4,10 +4,13 @@ import CardMedia from "@material-ui/core/CardMedia";
 import { makeStyles } from "@material-ui/core/styles";
 import styled from "styled-components";
 import VisibilitySensor from "react-visibility-sensor";
+import { useSelector } from "react-redux";
+
 import Link from "./Link";
 import Avatar from "./Avatar";
 import InfoStrip from "./InfoStrip";
 import Timestamp from "./Timestamp";
+import { formatTime } from "../utils";
 
 const useStyles = makeStyles({
   card: {
@@ -93,5 +96,23 @@ const ReplayCard = ({
     </Container>
   );
 };
+
+export const ReplayCardWrapped = ({ id }) => {
+  const r = useSelector((state) => state.replays.map[id]);
+  if (!r) return null;
+  return (
+    <ReplayCard
+      key={r.ReplayIndex}
+      id={r.UUID}
+      title={r.Comment}
+      uploader={r.UploadedByData?.Kuski}
+      filename={r.RecFileName}
+      uploaderId={r.UploadedBy}
+      timestamp={r.Uploaded}
+      infoStrip={formatTime(r.ReplayTime, 0, null, true)}
+      levelId={r.LevelIndex}
+    />
+  );
+}
 
 export default ReplayCard;

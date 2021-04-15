@@ -23,10 +23,11 @@ const ScrollView = ({ children, id, enableAt = 0, disabled }) => {
       autoHide={true}
       ref={view}
       autoHeight={d}
-      style={{ height: d ? "auto" : "100%", width: "100%" }}
+      style={{ height: d ? "auto" : "100%", width: "100%", maxHeight: 10000 }}
       onScroll={(e) => {
         scrollStore[id] = e.target.scrollTop;
       }}
+      autoHeightMax={100000}
     >
       {children}
     </Scrollbars>

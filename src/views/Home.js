@@ -1,10 +1,9 @@
 import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchReplays } from "../reducers/replays";
-import ReplayCard from "../components/ReplayCard";
+import { ReplayCardWrapped } from "../components/ReplayCard";
 import Grid from "../components/Grid";
 import ScrollView from "../components/ScrollView";
-import { formatTime } from "../utils";
 
 const Battles = () => {
   const dispatch = useDispatch();
@@ -17,22 +16,7 @@ const Battles = () => {
   return (
     <ScrollView id="replays">
       <Grid margin={12} gridMinWidth={350}>
-        {replays.list.map((id) => {
-          const r = replays.map[id];
-          return (
-            <ReplayCard
-              key={r.ReplayIndex}
-              id={r.UUID}
-              title={r.Comment}
-              uploader={r.UploadedByData?.Kuski}
-              filename={r.RecFileName}
-              uploaderId={r.UploadedBy}
-              timestamp={r.Uploaded}
-              infoStrip={formatTime(r.ReplayTime, 0, null, true)}
-              levelId={r.LevelIndex}
-            />
-          );
-        })}
+        {replays.list.map((id) => <ReplayCardWrapped id={id} key={id} />)}
       </Grid>
     </ScrollView>
   );
