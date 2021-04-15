@@ -1,8 +1,16 @@
-import { useSelector } from "react-redux";
+import { useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import { ReplayCardWrapped } from "../components/ReplayCard";
 import SideScroller from "../components/SideScroller";
+import { fetchLevelReplays } from "../reducers/replays";
 
 const ReplaySuggestions = ({ levId, excludeUUID }) => {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(fetchLevelReplays(levId));
+  }, [dispatch, levId]);
+
   const suggestions = useSelector(
     (state) => state.replays.byLevel[levId] || []
   ).filter((id) => id !== excludeUUID);
@@ -11,7 +19,9 @@ const ReplaySuggestions = ({ levId, excludeUUID }) => {
 
   return (
     <SideScroller title="Suggested">
-      {suggestions.map((id) => <ReplayCardWrapped id={id} key={id} />)}
+      {suggestions.map((id) => (
+        <ReplayCardWrapped id={id} key={id} />
+      ))}
     </SideScroller>
   );
 };

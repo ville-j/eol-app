@@ -12,7 +12,6 @@ import {
   fetchReplay,
   fetchReplayComments,
   addComment,
-  fetchLevelReplays,
 } from "../reducers/replays";
 import { loadRec } from "../reducers/player";
 import Avatar from "../components/Avatar";
@@ -38,7 +37,7 @@ const Comments = styled.div`
     width: 40%;
     height: 100%;
     background: ${(props) =>
-    props.theme.palette.surface[props.theme.palette.type]};
+      props.theme.palette.surface[props.theme.palette.type]};
     padding-bottom: 57px;
     z-index: 11;
     display: flex;
@@ -117,7 +116,6 @@ const Replay = () => {
   useEffect(() => {
     if (ReplayIndex) {
       dispatch(fetchReplayComments(ReplayIndex));
-      dispatch(fetchLevelReplays(LevelIndex));
     }
   }, [dispatch, ReplayIndex, LevelIndex]);
 

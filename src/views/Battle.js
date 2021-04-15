@@ -181,7 +181,7 @@ const Side = styled.div`
     width: 40%;
     height: 100%;
     background: ${(props) =>
-    props.theme.palette.surface[props.theme.palette.type]};
+      props.theme.palette.surface[props.theme.palette.type]};
     padding-bottom: 57px;
     z-index: 11;
     display: flex;
