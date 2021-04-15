@@ -5,8 +5,6 @@ import PlayArrow from "@material-ui/icons/PlayArrow";
 import Pause from "@material-ui/icons/Pause";
 import Fullscreen from "@material-ui/icons/Fullscreen";
 import FullscreenExit from "@material-ui/icons/FullscreenExit";
-import ZoomIn from "@material-ui/icons/ZoomIn";
-import ZoomOut from "@material-ui/icons/ZoomOut";
 import { useLocalStorage } from "react-use";
 import "../recplay/amd.js";
 
@@ -20,6 +18,9 @@ const Video = styled.div`
     ${(props) => !props.visible && `display: none;`}
   }
 `;
+
+let pinch = false;
+let preDist;
 
 const Player = ({ visible, recUrl, levUrl }) => {
   const container = useRef(null);
@@ -83,9 +84,24 @@ const Player = ({ visible, recUrl, levUrl }) => {
   }, [visible]);
 
   useEffect(() => {
+    const pl = container.current;
+    const wheelZoom = (e) => {
+      e.preventDefault();
+      if (e.deltaY < 0) {
+        setZoom(scale * 1.2);
+      } else {
+        setZoom(scale / 1.2);
+      }
+    };
     window.addEventListener("resize", resize);
+
+    if (pl) {
+      pl.addEventListener("wheel", wheelZoom);
+    }
+
     return () => {
       window.removeEventListener("resize", resize);
+      pl.removeEventListener("wheel", wheelZoom);
     };
   });
 
@@ -98,29 +114,16 @@ const Player = ({ visible, recUrl, levUrl }) => {
     resize();
   }, [fullscreen]);
 
+  const setZoom = (val) => {
+    canvas.current.player().setScale(val);
+    setScale(val);
+  };
+
   const controls = (
     <Controls fullscreen={fullscreen}>
       <LeftControls>
         <IconButton onClick={playPause}>
           {playing ? <Pause /> : <PlayArrow />}
-        </IconButton>
-        <IconButton
-          onClick={() => {
-            const s = canvas.current.player().scale() * 1.2;
-            canvas.current.player().setScale(s);
-            setScale(s);
-          }}
-        >
-          <ZoomIn />
-        </IconButton>
-        <IconButton
-          onClick={() => {
-            const s = canvas.current.player().scale() / 1.2;
-            canvas.current.player().setScale(s);
-            setScale(s);
-          }}
-        >
-          <ZoomOut />
         </IconButton>
       </LeftControls>
       <IconButton
@@ -136,7 +139,36 @@ const Player = ({ visible, recUrl, levUrl }) => {
   return (
     <Container>
       <div style={{ position: "relative" }}>
-        <PlayerPositioner fullscreen={fullscreen}>
+        <PlayerPositioner
+          fullscreen={fullscreen}
+          onTouchStart={(e) => {
+            if (e.touches.length === 2) {
+              pinch = true;
+            }
+          }}
+          onTouchMove={(e) => {
+            if (pinch) {
+              const dist = Math.hypot(
+                e.touches[0].pageX - e.touches[1].pageX,
+                e.touches[0].pageY - e.touches[1].pageY
+              );
+
+              if (preDist) {
+                if (preDist < dist) {
+                  setZoom(scale * 1.2);
+                } else {
+                  setZoom(scale / 1.2);
+                }
+              }
+
+              preDist = dist;
+            }
+          }}
+          onTouchEnd={() => {
+            pinch = false;
+            preDist = null;
+          }}
+        >
           <Video id="recplay" ref={container} visible={visible && !loading} />
           {fullscreen && controls}
         </PlayerPositioner>
@@ -157,6 +189,7 @@ const PlayerPositioner = styled.div`
   position: absolute;
   width: 100%;
   height: 100%;
+  pointer-events: all;
   ${(props) =>
     props.fullscreen &&
     css`

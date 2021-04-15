@@ -227,7 +227,7 @@ function make(levName, imagesPath, elem, document) {
                     return;
                 e.preventDefault();
                 var cont = pl.inputDrag(ts[0].clientX - r.left, ts[0].clientY - r.top, canvase.width, canvase.height);
-                var isClick = true;
+                var isClick = false;
                 function ontouchmove(e) {
                     var ts = e.changedTouches;
                     if (ts.length < 1)
