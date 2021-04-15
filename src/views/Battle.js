@@ -10,6 +10,8 @@ import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
 
 import { fetchBattle, fetchBattleRuns } from "../reducers/battles";
 import Kuski from "../components/Kuski";
+import ScrollView from "../components/ScrollView";
+import ReplaySuggestions from "../components/ReplaySuggestions";
 import { loadRec } from "../reducers/player";
 
 const useStyles = makeStyles({
@@ -104,67 +106,69 @@ const Battle = () => {
           Results {battle?.running ? "live" : ""}
         </div>
         <Divider />
-
-        <List disablePadding>
-          {battle?.results.map((t, i) => (
-            <React.Fragment key={i}>
-              <ListItem>
-                <div className={classes.rankCell}>{i + 1}.</div>
-                <div className={classes.kuskiCell}>
-                  {t.name}{" "}
-                  {t.team && (
-                    <span className={classes.team}>{`[${t.team}]`}</span>
-                  )}
-                </div>
-                <div className={classes.timeCell}>{t.time}</div>
-              </ListItem>
-              <Divider />
-            </React.Fragment>
-          ))}
-          {battle &&
-            battle.results.length < 1 &&
-            runs &&
-            runs[runs.length - 1].runs.map((t, i) => (
+        <ScrollView enableAt={1000}>
+          <List disablePadding>
+            {battle?.results.map((t, i) => (
               <React.Fragment key={i}>
                 <ListItem>
                   <div className={classes.rankCell}>{i + 1}.</div>
                   <div className={classes.kuskiCell}>
-                    <Kuski
-                      id={t.kuskiIndex}
-                      renderer={(kuski, team) => {
-                        return (
-                          <>
-                            {kuski}{" "}
-                            {team && (
-                              <span
-                                className={classes.team}
-                              >{`[${team}]`}</span>
-                            )}
-                          </>
-                        );
-                      }}
-                    />
-                  </div>
-                  <div className={classes.timeCell}>{t.time}</div>
-                  <div className={classes.prePosition}>
-                    {t.prev === -1 || t.prev === i ? (
-                      ""
-                    ) : t.prev - i < 0 ? (
-                      <>
-                        <RankDown /> {Math.abs(t.prev - i)}
-                      </>
-                    ) : (
-                      <>
-                        <RankUp /> {Math.abs(t.prev - i)}
-                      </>
+                    {t.name}{" "}
+                    {t.team && (
+                      <span className={classes.team}>{`[${t.team}]`}</span>
                     )}
                   </div>
+                  <div className={classes.timeCell}>{t.time}</div>
                 </ListItem>
                 <Divider />
               </React.Fragment>
             ))}
-        </List>
+            {battle &&
+              battle.results.length < 1 &&
+              runs &&
+              runs[runs.length - 1].runs.map((t, i) => (
+                <React.Fragment key={i}>
+                  <ListItem>
+                    <div className={classes.rankCell}>{i + 1}.</div>
+                    <div className={classes.kuskiCell}>
+                      <Kuski
+                        id={t.kuskiIndex}
+                        renderer={(kuski, team) => {
+                          return (
+                            <>
+                              {kuski}{" "}
+                              {team && (
+                                <span
+                                  className={classes.team}
+                                >{`[${team}]`}</span>
+                              )}
+                            </>
+                          );
+                        }}
+                      />
+                    </div>
+                    <div className={classes.timeCell}>{t.time}</div>
+                    <div className={classes.prePosition}>
+                      {t.prev === -1 || t.prev === i ? (
+                        ""
+                      ) : t.prev - i < 0 ? (
+                        <>
+                          <RankDown /> {Math.abs(t.prev - i)}
+                        </>
+                      ) : (
+                        <>
+                          <RankUp /> {Math.abs(t.prev - i)}
+                        </>
+                      )}
+                    </div>
+                  </ListItem>
+                  <Divider />
+                </React.Fragment>
+              ))}
+          </List>
+        </ScrollView>
       </Side>
+      <ReplaySuggestions levId={battle?.level.id} />
     </>
   );
 };
@@ -177,7 +181,7 @@ const Side = styled.div`
     width: 40%;
     height: 100%;
     background: ${(props) =>
-      props.theme.palette.surface[props.theme.palette.type]};
+    props.theme.palette.surface[props.theme.palette.type]};
     padding-bottom: 57px;
     z-index: 11;
     display: flex;
