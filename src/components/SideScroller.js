@@ -1,3 +1,5 @@
+import { useRef, useLayoutEffect } from "react";
+
 import { Scrollbars } from "react-custom-scrollbars";
 import styled from "styled-components";
 
@@ -37,11 +39,15 @@ const Title = styled.div`
 `;
 
 const SideScroller = ({ title, children }) => {
+  const view = useRef(null);
+  useLayoutEffect(() => {
+    view.current.scrollLeft(0);
+  });
   return (
     <>
       {title && <Title>{title}</Title>}
       <Container>
-        <Scrollbars>
+        <Scrollbars ref={view}>
           <Items>
             {children?.map((c, i) => (
               <ItemContainer key={i}>{c}</ItemContainer>

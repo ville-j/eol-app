@@ -8,7 +8,7 @@ const ReplaySuggestions = ({ levId, excludeUUID }) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(fetchLevelReplays(levId));
+    levId && dispatch(fetchLevelReplays(levId));
   }, [dispatch, levId]);
 
   const suggestions = useSelector(
