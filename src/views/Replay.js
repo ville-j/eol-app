@@ -172,6 +172,7 @@ const Replay = () => {
         {user.auth && (
           <InputContainer>
             <TextField
+              autoComplete="off"
               size="small"
               multiline
               rows={2}

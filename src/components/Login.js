@@ -41,6 +41,7 @@ const Login = () => {
         <div>Log in</div>
         <div>
           <TextField
+            autoComplete="off"
             label="Username"
             fullWidth
             variant="outlined"
@@ -53,6 +54,7 @@ const Login = () => {
         </div>
         <div>
           <TextField
+            autoComplete="off"
             label="Password"
             type="password"
             fullWidth

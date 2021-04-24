@@ -58,6 +58,25 @@ const auth = (_username, password) => async (dispatch) => {
   }
 };
 
-export { auth, logout };
+const getNotifications = async (dispatch) => {
+  const { token } = getLocalData("userData");
+
+  try {
+    const res = await client.instance.get(
+      `https://api.elma.online/notification`,
+      {
+        headers: {
+          authorization: token,
+        },
+      }
+    );
+
+    console.log(res);
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export { auth, logout, getNotifications };
 
 export default user.reducer;

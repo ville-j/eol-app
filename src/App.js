@@ -10,6 +10,7 @@ import ArrowLeft from "@material-ui/icons/ArrowLeft";
 import ArrowRight from "@material-ui/icons/ArrowRight";
 
 import { fetchBattlesBetween, setDate, getToday } from "./reducers/battles";
+import { fetchTags } from "./reducers/tags";
 import Router from "./Router";
 import Navigation from "./components/Navigation";
 import TopBar from "./components/TopBar";
@@ -141,6 +142,10 @@ const Input = (props) => {
 function App() {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user);
+
+  useEffect(() => {
+    dispatch(fetchTags());
+  }, [dispatch]);
 
   return (
     <div className="App">

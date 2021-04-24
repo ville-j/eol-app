@@ -111,12 +111,31 @@ const addComment = (id, message) => async (dispatch) => {
   }
 };
 
+const upload = (data, filename) => async (dispatch) => {
+  try {
+    const { token } = getLocalData("userData");
+    const formData = new FormData();
+    formData.append("file", data);
+    formData.append("filename", filename);
+    formData.append("token", token);
+
+    await client.post("https://api.elma.online/upload/replay", formData, {
+      headers: {
+        authorization: token,
+      },
+    });
+  } catch (err) {
+    console.log(err);
+  }
+};
+
 export {
   fetchReplays,
   fetchReplay,
   fetchReplayComments,
   addComment,
   fetchLevelReplays,
+  upload,
 };
 
 export default replays.reducer;

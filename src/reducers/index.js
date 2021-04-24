@@ -5,6 +5,7 @@ import battlesReducer from "./battles";
 import userReducer from "./user";
 import uiReducer from "./ui";
 import playerReducer from "./player";
+import tagsReducer from "./tags";
 
 const rootReducer = combineReducers({
   replays: replaysReducer,
@@ -13,6 +14,7 @@ const rootReducer = combineReducers({
   user: userReducer,
   ui: uiReducer,
   player: playerReducer,
+  tags: tagsReducer,
 });
 
 export default rootReducer;
