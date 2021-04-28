@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Card from "@material-ui/core/Card";
 import CardMedia from "@material-ui/core/CardMedia";
 import { makeStyles } from "@material-ui/core/styles";
 import styled from "styled-components";
 import VisibilitySensor from "react-visibility-sensor";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { fetchReplay } from "../reducers/replays";
 
 import Link from "./Link";
 import Avatar from "./Avatar";
@@ -98,8 +99,16 @@ const ReplayCard = ({
 };
 
 export const ReplayCardWrapped = ({ id }) => {
+  const dispatch = useDispatch();
   const r = useSelector((state) => state.replays.map[id]);
+  const uuid = r ? r.UUID : "";
+
+  useEffect(() => {
+    if (id && !uuid) dispatch(fetchReplay(id));
+  }, [dispatch, id, uuid]);
+
   if (!r) return null;
+
   return (
     <ReplayCard
       key={r.ReplayIndex}
@@ -113,6 +122,6 @@ export const ReplayCardWrapped = ({ id }) => {
       levelId={r.LevelIndex}
     />
   );
-}
+};
 
 export default ReplayCard;

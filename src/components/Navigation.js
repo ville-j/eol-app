@@ -2,6 +2,7 @@ import BottomNavigation from "@material-ui/core/BottomNavigation";
 import BottomNavigationAction from "@material-ui/core/BottomNavigationAction";
 import LiveTvIcon from "@material-ui/icons/LiveTv";
 import FlagIcon from "@material-ui/icons/Flag";
+import AddCircleIcon from "@material-ui/icons/AddCircle";
 import styled from "styled-components";
 import { NavLink } from "react-router-dom";
 import { useTheme } from "@material-ui/core/styles";
@@ -18,6 +19,15 @@ const Container = styled.div`
   background: ${(props) => props.theme.palette.background.paper};
   overflow: hidden;
   z-index: 12;
+
+  a {
+    opacity: 0.6;
+  }
+
+  .active {
+    opacity: 1;
+    color: #fff;
+  }
 `;
 
 const Navigation = () => {
@@ -39,7 +49,17 @@ const Navigation = () => {
         />
         <BottomNavigationAction
           component={NavLink}
+          to="/upload"
+          label="Upload"
+          icon={<AddCircleIcon />}
+          onClick={() => {
+            resetScroll(`battles-${getToday()}`);
+          }}
+        />
+        <BottomNavigationAction
+          component={NavLink}
           to="/battles"
+          exact
           label="Battles"
           icon={<FlagIcon />}
           onClick={() => {

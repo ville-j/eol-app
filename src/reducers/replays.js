@@ -12,7 +12,7 @@ const replays = createSlice({
   },
   reducers: {
     getReplaysSuccess(state, action) {
-      state.list = action.payload.map((r) => r.UUID);
+      state.list = action.payload.filter((r) => r.UUID).map((r) => r.UUID);
       action.payload.forEach((r) => {
         state.map[r.UUID] = {
           ...r,
@@ -111,12 +111,86 @@ const addComment = (id, message) => async (dispatch) => {
   }
 };
 
+const upload = async (
+  data,
+  filename,
+  drivenBy,
+  drivenById,
+  description,
+  tags,
+  unlisted
+) => {
+  try {
+    const { token } = getLocalData("userData");
+    const formData = new FormData();
+    formData.append("file", data);
+    formData.append("filename", filename);
+
+    const response = await client.post(
+      "https://api.elma.online/upload/replay",
+      formData,
+      {
+        headers: {
+          authorization: token,
+        },
+      }
+    );
+    const {
+      LevelIndex,
+      MD5,
+      file,
+      finished,
+      time,
+      uuid,
+      error,
+    } = response.data;
+
+    if (error) throw new Error(error);
+
+    const updateResponse = await client.post(
+      "https://api.elma.online/api/replay",
+      {
+        Bug: 0,
+        Comment: description,
+        DrivenBy: drivenById,
+        DrivenByText: drivenBy,
+        Finished: finished,
+        LevelIndex: LevelIndex,
+        MD5: MD5,
+        Nitro: 0,
+        RecFileName: file,
+        ReplayTime: time,
+        TAS: 0,
+        Tags: tags.map((t) => ({
+          TagIndex: t.id,
+          Name: t.name,
+          Hidden: t.hidden,
+        })),
+        UUID: uuid,
+        Unlisted: unlisted,
+        Uploaded: Math.floor(new Date().getTime() / 1000),
+        UploadedBy: 0,
+      },
+      {
+        headers: {
+          authorization: token,
+        },
+      }
+    );
+    return updateResponse;
+  } catch (err) {
+    console.log(err);
+    return { error: err };
+  }
+};
+
 export {
   fetchReplays,
   fetchReplay,
   fetchReplayComments,
   addComment,
   fetchLevelReplays,
+  upload,
 };
 
 export default replays.reducer;

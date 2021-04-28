@@ -7,6 +7,7 @@ import Battles from "./views/Battles";
 import Home from "./views/Home";
 import Replay from "./views/Replay";
 import Battle from "./views/Battle";
+import Upload from "./views/Upload";
 import ScrollView from "./components/ScrollView";
 import Player from "./components/Player";
 import BackButton from "./components/BackButton";
@@ -90,6 +91,9 @@ const Router = () => {
           </Route>
           <Route exact path="/">
             <Home />
+          </Route>
+          <Route exact path="/upload">
+            <Upload />
           </Route>
         </Switch>
       </MainWrapper>
