@@ -66,6 +66,7 @@ const defaultValues = {
   binary: null,
   drivenById: null,
   uuid: null,
+  error: "",
 };
 
 let cancelToken;
@@ -219,9 +220,14 @@ const Upload = () => {
                         values.unlisted
                       );
 
-                      if (response) {
-                        setValues({ ...defaultValues, uuid: response.UUID });
+                      if (!response.error) {
+                        setValues({
+                          ...defaultValues,
+                          uuid: response.data.UUID,
+                        });
                         setShowUpload(true);
+                      } else {
+                        setValues({ ...values, error: response.error });
                       }
                       setLoading(false);
                     }}
@@ -233,13 +239,14 @@ const Upload = () => {
                     {loading ? "Uploading..." : "Upload"}
                   </Button>
                 </div>
+                <div>{values.error}</div>
               </>
             )}
             {showUpload && (
               <>
                 <div>Replay uploaded</div>
                 <Divider />
-                <div>
+                <div style={{ maxWidth: 400 }}>
                   <ReplayCardWrapped id={values.uuid} />
                 </div>
               </>

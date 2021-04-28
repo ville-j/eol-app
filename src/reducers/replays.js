@@ -145,7 +145,7 @@ const upload = async (
       error,
     } = response.data;
 
-    if (error) throw new Error("could not upload");
+    if (error) throw new Error(error);
 
     const updateResponse = await client.post(
       "https://api.elma.online/api/replay",
@@ -177,9 +177,10 @@ const upload = async (
         },
       }
     );
-    return updateResponse.data;
+    return updateResponse;
   } catch (err) {
     console.log(err);
+    return { error: err };
   }
 };
 
