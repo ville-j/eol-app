@@ -29,6 +29,11 @@ const Player = ({ visible, recUrl, levUrl }) => {
   const [playing, setPlaying] = useState(true);
   const [fullscreen, setFullscreen] = useState(false);
   const [scale, setScale] = useLocalStorage("scale", 1);
+  const plPlaying = canvas.current?.player().playing();
+
+  useEffect(() => {
+    plPlaying !== undefined && setPlaying(plPlaying);
+  }, [plPlaying]);
 
   const resize = () => {
     if (canvas.current && container.current) {
@@ -72,10 +77,9 @@ const Player = ({ visible, recUrl, levUrl }) => {
 
   useEffect(() => {
     if (canvas.current) {
-      const playing = canvas.current.player().playing();
-      if (playing !== visible) {
+      const plPlaying = canvas.current.player().playing();
+      if (plPlaying !== visible) {
         canvas.current.player().playPause();
-        setPlaying((prev) => !prev);
       }
       if (!visible) {
         setFullscreen(false);
