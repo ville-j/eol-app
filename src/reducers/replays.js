@@ -45,16 +45,18 @@ const {
   getLevelReplaysSuccess,
 } = replays.actions;
 
-const fetchReplays = (offset = 0) => async (dispatch) => {
-  try {
-    const response = await axios.get(
-      `https://api.elma.online/api/replay?page=${offset}&pageSize=50`
-    );
-    dispatch(getReplaysSuccess(response.data.rows));
-  } catch (err) {
-    console.log(err);
-  }
-};
+const fetchReplays =
+  (offset = 0) =>
+  async (dispatch) => {
+    try {
+      const response = await axios.get(
+        `https://api.elma.online/api/replay?page=${offset}&pageSize=50`
+      );
+      dispatch(getReplaysSuccess(response.data.rows));
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
 const fetchReplay = (id) => async (dispatch) => {
   try {
@@ -135,15 +137,8 @@ const upload = async (
         },
       }
     );
-    const {
-      LevelIndex,
-      MD5,
-      file,
-      finished,
-      time,
-      uuid,
-      error,
-    } = response.data;
+    const { LevelIndex, MD5, file, finished, time, uuid, error } =
+      response.data;
 
     if (error) throw new Error(error);
 
