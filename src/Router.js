@@ -74,7 +74,10 @@ const Router = () => {
         </TopBar>
       </Route>
       <MainWrapper isReplayView={isReplayView}>
-        <ScrollView disabled={!isReplayView}>
+        <ScrollView
+          disabled={!isReplayView}
+          id={isReplayView ? recUrl : "main"}
+        >
           <PlayerContainer visible={isReplayView}>
             <Player visible={isReplayView} recUrl={recUrl} levUrl={levUrl} />
           </PlayerContainer>
