@@ -7,8 +7,7 @@ import styled from "styled-components";
 import { NavLink } from "react-router-dom";
 import { useTheme } from "@material-ui/core/styles";
 import { useDispatch } from "react-redux";
-import { resetDate, getToday } from "../reducers/battles";
-import { resetScroll } from "./ScrollView";
+import { resetDate } from "../reducers/battles";
 
 const Container = styled.div`
   position: fixed;
@@ -43,18 +42,12 @@ const Navigation = () => {
           to="/"
           label="Replays"
           icon={<LiveTvIcon />}
-          onClick={() => {
-            resetScroll(`replays`);
-          }}
         />
         <BottomNavigationAction
           component={NavLink}
           to="/upload"
           label="Upload"
           icon={<AddCircleIcon />}
-          onClick={() => {
-            resetScroll(`battles-${getToday()}`);
-          }}
         />
         <BottomNavigationAction
           component={NavLink}
@@ -64,7 +57,6 @@ const Navigation = () => {
           icon={<FlagIcon />}
           onClick={() => {
             dispatch(resetDate());
-            resetScroll(`battles-${getToday()}`);
           }}
         />
       </BottomNavigation>
