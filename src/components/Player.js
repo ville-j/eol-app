@@ -80,7 +80,6 @@ const Player = ({ visible, recUrl, levUrl }) => {
       const plPlaying = canvas.current.player().playing();
       if (plPlaying !== visible) {
         canvas.current.player().playPause();
-        setPlaying((prev) => !prev);
       }
       if (!visible) {
         setFullscreen(false);
