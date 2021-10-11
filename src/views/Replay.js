@@ -18,8 +18,8 @@ import Avatar from "../components/Avatar";
 import Kuski from "../components/Kuski";
 import Timestamp from "../components/Timestamp";
 import ScrollView from "../components/ScrollView";
+import Tag from "../components/Tag";
 import ReplaySuggestions from "../components/ReplaySuggestions";
-import { formatTime } from "../utils";
 
 const Comment = styled.div`
   margin: 0;
@@ -70,31 +70,13 @@ const InputContainer = styled.div`
   padding: 12px;
 `;
 
-const DataContainer = styled.div`
-  flex: 1;
+const Tags = styled.div`
   display: flex;
-  justify-content: flex-end;
-`;
-
-const DataTable = styled.div`
-  font-size: 0.8em;
-  opacity: 0.8;
-  margin-left: 0.8em;
-  white-space: nowrap;
-  display: table;
-  > div {
-    display: table-row;
-    > * {
-      display: table-cell;
-    }
-    font-weight: 100;
-  }
-`;
-
-const DataTitle = styled.span`
-  font-weight: 400;
-  padding-right: 8px;
-  width: 70px;
+  padding: 12px;
+  padding-top: 0;
+  gap: 8px;
+  align-items: center;
+  font-size: 0.8rem;
 `;
 
 const Replay = () => {
@@ -150,23 +132,17 @@ const Replay = () => {
           {replay.Comment && <div>{replay.Comment}</div>}
           <div>{replay.RecFileName}</div>
         </div>
-        <DataContainer>
-          <DataTable>
-            <div>
-              <DataTitle>length</DataTitle>
-              <span>{formatTime(replay.ReplayTime, 0, null, true, true)}</span>
-            </div>
-            <div>
-              <DataTitle>finished</DataTitle>
-              <span>{replay.Finished ? "yes" : "no"}</span>
-            </div>
-            <div>
-              <DataTitle>tas</DataTitle>
-              <span>{replay.TAS ? "yes" : "no"}</span>
-            </div>
-          </DataTable>
-        </DataContainer>
       </ReplayInfo>
+      {replay.Tags.length > 0 && (
+        <>
+          <Tags>
+            <div>Tags</div>
+            {replay.Tags.map((t) => (
+              <Tag key={t.TagIndex}>{t.Name}</Tag>
+            ))}
+          </Tags>
+        </>
+      )}
       <Divider />
       <Comments theme={theme}>
         {user.auth && (
