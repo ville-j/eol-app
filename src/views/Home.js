@@ -16,7 +16,9 @@ const Battles = () => {
   return (
     <ScrollView id="replays">
       <Grid margin={12} gridMinWidth={350}>
-        {replays.list.map((id) => <ReplayCardWrapped id={id} key={id} />)}
+        {replays.list.map((id) => (
+          <ReplayCardWrapped id={id} key={id} />
+        ))}
       </Grid>
     </ScrollView>
   );

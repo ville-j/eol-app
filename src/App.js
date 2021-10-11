@@ -16,7 +16,6 @@ import Navigation from "./components/Navigation";
 import TopBar from "./components/TopBar";
 import Login from "./components/Login";
 import Avatar from "./components/Avatar";
-import { resetScroll } from "./components/ScrollView";
 import { showLogin } from "./reducers/ui";
 
 import { dateFns } from "./utils";
@@ -63,7 +62,6 @@ const BattleDatePicker = () => {
   }, [dispatch, t]);
 
   const handleDateChange = (date) => {
-    resetScroll(`battles-${date.getTime()}`);
     history.push(`/battles?t=${date.getTime()}`);
   };
 
@@ -110,7 +108,6 @@ const Input = (props) => {
   const date = useSelector((state) => state.battles.date);
 
   const handleDateChange = (date) => {
-    resetScroll(`battles-${date.getTime()}`);
     history.push(`/battles?t=${date.getTime()}`);
   };
 

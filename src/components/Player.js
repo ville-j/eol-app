@@ -31,16 +31,16 @@ const Player = ({ visible, recUrl, levUrl }) => {
   const [scale, setScale] = useLocalStorage("scale", 1);
   const plPlaying = canvas.current?.player().playing();
 
-  useEffect(() => {
-    plPlaying !== undefined && setPlaying(plPlaying);
-  }, [plPlaying]);
-
   const resize = () => {
     if (canvas.current && container.current) {
       const bounds = container.current.getBoundingClientRect();
       canvas.current.resize(bounds.width, bounds.height);
     }
   };
+
+  useEffect(() => {
+    plPlaying !== undefined && setPlaying(plPlaying);
+  }, [plPlaying]);
 
   useLayoutEffect(() => {
     if (levUrl) {
