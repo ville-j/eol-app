@@ -4,16 +4,16 @@ import { ReplayCardWrapped } from "../components/ReplayCard";
 import SideScroller from "../components/SideScroller";
 import { fetchLevelReplays } from "../reducers/replays";
 
-const ReplaySuggestions = ({ levId, excludeUUID }) => {
+const ReplaySuggestions = ({ levId, excludeUUID, excludeBattleWinner }) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
     levId && dispatch(fetchLevelReplays(levId));
   }, [dispatch, levId]);
 
-  const suggestions = useSelector(
-    (state) => state.replays.byLevel[levId] || []
-  ).filter((id) => id !== excludeUUID);
+  const suggestions = useSelector((state) => state.replays.byLevel[levId] || [])
+    .filter((id) => id !== excludeUUID)
+    .filter((id) => !(excludeBattleWinner && id.includes("b-")));
 
   if (suggestions.length < 1) return null;
 

@@ -29,12 +29,12 @@ const replays = createSlice({
       state.byLevel[action.payload.levelId] = [];
 
       action.payload.data.forEach((r) => {
-        if (r.UUID.search("b-") < 0 && r.UUID.search("_") < 0) {
-          state.byLevel[action.payload.levelId].push(r.UUID);
-          state.map[r.UUID] = {
-            ...r,
-          };
-        }
+        //if (r.UUID.search("b-") < 0 && r.UUID.search("_") < 0) {
+        state.byLevel[action.payload.levelId].push(r.UUID);
+        state.map[r.UUID] = {
+          ...r,
+        };
+        //}
       });
     },
   },
