@@ -14,12 +14,20 @@ const ScrollView = ({ children, id, enableAt = 0, disabled }) => {
   const [w] = useWindowDimensions();
 
   useLayoutEffect(() => {
-    if (view.current?.scrollTop) {
-      view.current.scrollTop(
-        scrollStore[id] && history.action === "POP" ? scrollStore[id] : 0
-      );
+    if (
+      view.current?.scrollTop &&
+      scrollStore[id] &&
+      history.action === "POP"
+    ) {
+      view.current.scrollTop(scrollStore[id]);
     }
   });
+
+  useLayoutEffect(() => {
+    if (view.current?.scrollTop && history.action === "PUSH") {
+      view.current.scrollTop(0);
+    }
+  }, [id, history.action]);
 
   const d = disabled || w < enableAt;
 

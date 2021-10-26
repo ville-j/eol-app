@@ -84,7 +84,7 @@ const Replay = () => {
   const match = useRouteMatch("/r/:id");
   const replay = useSelector((state) => state.replays.map[match.params.id]);
   const comments = useSelector(
-    (state) => state.replays.comments[replay?.ReplayIndex]
+    (state) => state.replays.comments[replay?.ReplayIndex || replay?.UUID]
   );
 
   const user = useSelector((state) => state.user);
@@ -98,14 +98,27 @@ const Replay = () => {
   useEffect(() => {
     if (ReplayIndex) {
       dispatch(fetchReplayComments(ReplayIndex));
+    } else if (ReplayIndex === 0) {
+      dispatch(fetchReplayComments(UUID));
     }
-  }, [dispatch, ReplayIndex, LevelIndex]);
+  }, [dispatch, ReplayIndex, LevelIndex, UUID]);
 
   useEffect(() => {
-    if (ReplayIndex) {
+    const getRecUrl = () => {
+      if (UUID.includes("_")) {
+        const a = UUID.split("_");
+        return `https://space.elma.online/time/${a[0]}-${a[1]}/${a[2]}.rec`;
+      }
+      if (UUID.includes("b-")) {
+        return `https://api.elma.online/dl/battlereplay/${UUID.substr(2)}`;
+      }
+      return `https://eol.ams3.digitaloceanspaces.com/replays/${UUID}/${RecFileName}`;
+    };
+
+    if (UUID) {
       dispatch(
         loadRec({
-          recUrl: `https://eol.ams3.digitaloceanspaces.com/replays/${UUID}/${RecFileName}`,
+          recUrl: getRecUrl(),
           levUrl: `https://api.elma.online/dl/level/${LevelIndex}`,
         })
       );

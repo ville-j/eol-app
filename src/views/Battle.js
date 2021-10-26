@@ -168,7 +168,7 @@ const Battle = () => {
           </List>
         </ScrollView>
       </Side>
-      <ReplaySuggestions levId={battle?.level.id} />
+      <ReplaySuggestions levId={battle?.level.id} excludeBattleWinner />
     </>
   );
 };

@@ -26,13 +26,15 @@ const replays = createSlice({
       state.comments[action.payload.id] = action.payload.data;
     },
     getLevelReplaysSuccess(state, action) {
-      state.byLevel[action.payload.levelId] = action.payload.data.map(
-        (r) => r.UUID
-      );
+      state.byLevel[action.payload.levelId] = [];
+
       action.payload.data.forEach((r) => {
+        //if (r.UUID.search("b-") < 0 && r.UUID.search("_") < 0) {
+        state.byLevel[action.payload.levelId].push(r.UUID);
         state.map[r.UUID] = {
           ...r,
         };
+        //}
       });
     },
   },
